@@ -1,11 +1,17 @@
 from __future__ import annotations
 
+import asyncio
 from collections.abc import AsyncIterator, Iterator
 
 import pytest
 import pytest_asyncio
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
 from gemvault.adapters.persistence import Base, get_sessionmaker
 
@@ -47,7 +53,6 @@ def schema_ready(database_url: str) -> bool:
     cross-loop pain entirely. The async engine each test builds afterwards just
     connects to a DB that already has its schema.
     """
-    import asyncio
 
     async def _create() -> None:
         engine = create_async_engine(database_url)

@@ -51,8 +51,12 @@ contract GemVaultCertificate is ERC721, AccessControl, Pausable {
         external
         onlyRole(ATTESTER_ROLE)
     {
-        if (_ownerOf(tokenId) == address(0)) revert TokenDoesNotExist(tokenId);
-        if (attestations[tokenId].attested) revert AlreadyAttested(tokenId);
+        if (_ownerOf(tokenId) == address(0)) {
+            revert TokenDoesNotExist(tokenId);
+        }
+        if (attestations[tokenId].attested) {
+            revert AlreadyAttested(tokenId);
+        }
 
         attestations[tokenId] =
             Attestation({attested: true, vaultRef: vaultRef, attestedAt: block.timestamp});
@@ -60,7 +64,9 @@ contract GemVaultCertificate is ERC721, AccessControl, Pausable {
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        if (_ownerOf(tokenId) == address(0)) revert TokenDoesNotExist(tokenId);
+        if (_ownerOf(tokenId) == address(0)) {
+            revert TokenDoesNotExist(tokenId);
+        }
         return string.concat("ipfs://", _ipfsMetadataHash[tokenId]);
     }
 
