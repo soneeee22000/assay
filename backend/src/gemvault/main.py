@@ -8,8 +8,7 @@ from gemvault import __version__
 from gemvault.adapters.api import api_router, install_exception_handlers
 
 _DESCRIPTION = (
-    "Reference RWA fintech backend: financial-grade ledger + on-chain "
-    "certificate orchestration."
+    "Reference RWA fintech backend: financial-grade ledger + on-chain certificate orchestration."
 )
 
 app = FastAPI(
