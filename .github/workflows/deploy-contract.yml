@@ -1,0 +1,82 @@
+name: Deploy Contract
+
+on:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: Network to deploy to
+        type: choice
+        default: base_sepolia
+        options:
+          - base_sepolia
+      verify:
+        description: Verify source on Basescan after deploy
+        type: boolean
+        default: true
+
+concurrency:
+  group: deploy-contract-${{ inputs.network }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy GemVaultCertificate to ${{ inputs.network }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Install dependencies
+        run: |
+          forge install OpenZeppelin/openzeppelin-contracts
+          forge install foundry-rs/forge-std
+
+      - name: Build
+        run: forge build --sizes
+
+      - name: Sanity tests
+        run: FOUNDRY_PROFILE=ci forge test -vv
+
+      - name: Deploy + verify
+        env:
+          BASE_RPC_URL: ${{ secrets.BASE_RPC_URL }}
+          ADMIN_PRIVATE_KEY: ${{ secrets.ADMIN_PRIVATE_KEY }}
+          BASESCAN_API_KEY: ${{ secrets.BASESCAN_API_KEY }}
+        run: |
+          set -euo pipefail
+          VERIFY_FLAG=""
+          if [ "${{ inputs.verify }}" = "true" ]; then
+            VERIFY_FLAG="--verify"
+          fi
+          forge script script/Deploy.s.sol:Deploy \
+            --rpc-url "$BASE_RPC_URL" \
+            --broadcast \
+            $VERIFY_FLAG \
+            -vvv | tee deploy.log
+
+      - name: Surface deployed address
+        run: |
+          ADDR=$(grep -oE '0x[a-fA-F0-9]{40}' deploy.log | tail -n 1 || true)
+          echo "Deployed contract: ${ADDR:-unknown}"
+          echo "## GemVaultCertificate deployed" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Network: \`${{ inputs.network }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Address: \`${ADDR:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Basescan: https://sepolia.basescan.org/address/${ADDR}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload broadcast artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: broadcast-${{ inputs.network }}
+          path: |
+            contracts/broadcast/**
+            contracts/deploy.log
+          retention-days: 30
