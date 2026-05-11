@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-import {Script, console2} from "forge-std/Script.sol";
-import {GemVaultCertificate} from "../src/GemVaultCertificate.sol";
+import { Script, console2 } from "forge-std/Script.sol";
+import { GemVaultCertificate } from "../src/GemVaultCertificate.sol";
 
 contract Deploy is Script {
     function run() external returns (GemVaultCertificate cert) {
