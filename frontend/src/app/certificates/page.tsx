@@ -1,9 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  Award,
+  ExternalLink,
+  HardDrive,
+  Inbox,
+  RefreshCw,
+  Sparkles,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { AuthGate } from "@/components/auth-gate";
 import { DashboardShell } from "@/components/dashboard-shell";
+import {
+  Badge,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  EmptyState,
+  ErrorRow,
+  KpiCard,
+  LoadingRow,
+} from "@/components/ui";
 import { ApiError, fetchAuditExport, type DomainEvent } from "@/lib/api";
 import { formatTimestamp, truncateMiddle } from "@/lib/format";
 
@@ -25,9 +44,7 @@ type CertificateSummary = {
 export default function CertificatesPage() {
   return (
     <AuthGate>
-      <DashboardShell>
-        <CertificatesGallery />
-      </DashboardShell>
+      <CertificatesGallery />
     </AuthGate>
   );
 }
@@ -37,7 +54,9 @@ function CertificatesGallery() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setLoading(true);
+    setError(null);
     const to = new Date();
     const from = new Date(to.getTime() - WINDOW_HOURS * 60 * 60 * 1000);
     fetchAuditExport({ from: from.toISOString(), to: to.toISOString() })
@@ -49,89 +68,173 @@ function CertificatesGallery() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return <p className="font-mono text-sm text-muted-foreground">Loading…</p>;
-  }
+  useEffect(() => {
+    load();
+  }, [load]);
 
-  if (error) {
-    return (
-      <p
-        role="alert"
-        className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger"
-      >
-        {error}
-      </p>
-    );
-  }
-
-  if (certificates.length === 0) {
-    return (
-      <div className="rounded-md border border-border bg-muted/50 px-4 py-6 text-sm text-muted-foreground">
-        No certificates minted in the last {WINDOW_HOURS} hours. Drive an escrow
-        all the way through{" "}
-        <code className="font-mono text-xs">/escrows/&#123;id&#125;/mint</code>{" "}
-        to see one here.
-      </div>
-    );
-  }
+  const stats = useMemo(
+    () => ({
+      total: certificates.length,
+      latest: certificates[0]?.minted_at
+        ? formatTimestamp(certificates[0].minted_at)
+        : "—",
+    }),
+    [certificates],
+  );
 
   return (
-    <div className="space-y-3">
-      <header className="flex items-baseline justify-between">
-        <h2 className="text-lg font-semibold tracking-tight">
-          Certificates of authenticity
-        </h2>
-        <span className="font-mono text-xs text-muted-foreground">
-          {certificates.length} · last {WINDOW_HOURS}h
-        </span>
-      </header>
+    <DashboardShell
+      title="Certificates of authenticity"
+      description="ERC-721 certificates minted to Base. Each one is anchored to a physical asset and the escrow that paid for it."
+      actions={
+        <Button
+          variant="secondary"
+          size="sm"
+          leadingIcon={RefreshCw}
+          onClick={load}
+          disabled={loading}
+        >
+          Refresh
+        </Button>
+      }
+    >
+      <div className="grid gap-3 sm:grid-cols-3">
+        <KpiCard
+          label="Total certificates"
+          value={stats.total}
+          hint={`last ${WINDOW_HOURS}h`}
+          icon={Award}
+          tone="accent"
+        />
+        <KpiCard
+          label="Latest mint"
+          value={stats.latest}
+          hint="UTC"
+          icon={Sparkles}
+          tone="primary"
+        />
+        <KpiCard
+          label="Storage"
+          value="IPFS"
+          hint="via Pinata"
+          icon={HardDrive}
+          tone="neutral"
+        />
+      </div>
 
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {certificates.map((cert) => (
-          <li
-            key={cert.certificate_id}
-            className="rounded-md border border-border bg-muted/30 p-4"
-          >
-            <div className="flex items-baseline justify-between gap-3">
-              <p className="font-mono text-xs text-muted-foreground">
-                Token #{cert.token_id}
-              </p>
-              <p className="font-mono text-[11px] text-muted-foreground">
-                {formatTimestamp(cert.minted_at)}
-              </p>
+      <Card className="mt-6">
+        <CardHeader>
+          <h2 className="text-sm font-semibold text-foreground">
+            Minted certificates
+          </h2>
+          <Badge tone="neutral">{certificates.length}</Badge>
+        </CardHeader>
+
+        {loading ? (
+          <LoadingRow label="Loading certificates…" />
+        ) : error ? (
+          <CardBody>
+            <ErrorRow title="Failed to load certificates" detail={error} />
+          </CardBody>
+        ) : certificates.length === 0 ? (
+          <CardBody>
+            <EmptyState
+              icon={Inbox}
+              title="No certificates yet"
+              description={
+                <>
+                  Drive an escrow through{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">
+                    POST /escrows/&#123;id&#125;/mint
+                  </code>{" "}
+                  to mint one.
+                </>
+              }
+            />
+          </CardBody>
+        ) : (
+          <CardBody className="px-4 py-4 sm:px-5 sm:py-5">
+            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {certificates.map((cert) => (
+                <CertificateCard key={cert.certificate_id} cert={cert} />
+              ))}
+            </ul>
+          </CardBody>
+        )}
+      </Card>
+    </DashboardShell>
+  );
+}
+
+function CertificateCard({ cert }: { cert: CertificateSummary }) {
+  return (
+    <li>
+      <Card className="h-full transition-shadow hover:shadow-md">
+        <div className="relative overflow-hidden rounded-t-lg border-b border-border bg-muted/60 px-5 py-6">
+          <div className="flex items-start justify-between">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface shadow-sm">
+              <Award className="h-5 w-5 text-primary" aria-hidden />
             </div>
+            <Badge tone="accent">Token #{cert.token_id}</Badge>
+          </div>
+          <p className="mt-4 font-mono text-[10px] uppercase tracking-wider text-foreground-muted">
+            Certificate of authenticity
+          </p>
+          <p className="mt-1 font-mono text-xs font-medium text-foreground">
+            {truncateMiddle(cert.certificate_id, 8, 6)}
+          </p>
+        </div>
 
-            <p className="mt-3 font-mono text-xs">
-              <span className="text-muted-foreground">cert </span>
-              {truncateMiddle(cert.certificate_id, 8, 6)}
+        <CardBody className="space-y-3">
+          <div className="space-y-1">
+            <p className="font-mono text-[10px] uppercase tracking-wider text-foreground-muted">
+              Escrow
             </p>
-            <p className="font-mono text-xs">
-              <span className="text-muted-foreground">escrow </span>
+            <p className="font-mono text-xs text-foreground">
               {truncateMiddle(cert.escrow_id, 8, 6)}
             </p>
+          </div>
 
-            <div className="mt-4 flex flex-wrap gap-2">
-              <a
-                href={`${BASESCAN_TX}/${cert.tx_hash}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-md border border-border bg-input px-2.5 py-1 font-mono text-[11px] text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-              >
-                Basescan ↗
-              </a>
-              <a
-                href={`${IPFS_GATEWAY}/${cert.ipfs_hash}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-md border border-border bg-input px-2.5 py-1 font-mono text-[11px] text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-              >
-                IPFS ↗
-              </a>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+          <div className="space-y-1">
+            <p className="font-mono text-[10px] uppercase tracking-wider text-foreground-muted">
+              Minted
+            </p>
+            <p className="font-mono text-xs tabular-nums text-foreground">
+              {formatTimestamp(cert.minted_at)}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2 pt-1">
+            <ExternalChip href={`${BASESCAN_TX}/${cert.tx_hash}`}>
+              Basescan
+            </ExternalChip>
+            <ExternalChip href={`${IPFS_GATEWAY}/${cert.ipfs_hash}`}>
+              IPFS
+            </ExternalChip>
+          </div>
+        </CardBody>
+      </Card>
+    </li>
+  );
+}
+
+function ExternalChip({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1 rounded-md border border-border bg-surface px-2.5 py-1 font-mono text-[11px] font-medium text-foreground transition-colors hover:border-primary hover:bg-primary-soft hover:text-primary-soft-foreground"
+    >
+      {children}
+      <ExternalLink className="h-3 w-3" aria-hidden />
+    </a>
   );
 }
 

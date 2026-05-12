@@ -1,10 +1,28 @@
 import type { Metadata } from "next";
+import { Fira_Code, Fira_Sans } from "next/font/google";
+
 import "./globals.css";
 
+const firaSans = Fira_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-fira-sans",
+});
+
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+  variable: "--font-fira-code",
+});
+
 export const metadata: Metadata = {
-  title: "GemVault",
+  title: "GemVault — RWA Fintech Reference Architecture",
   description:
-    "Reference RWA fintech: physical-asset certificate-of-authenticity NFTs with vault custody and a financial-grade ledger.",
+    "Event-sourced ledger, on-chain certificates of authenticity, and custodian-backed escrow lifecycle. Read-only admin dashboard.",
+  applicationName: "GemVault",
+  authors: [{ name: "Pyae Sone Kyaw", url: "https://pseonkyaw.dev" }],
 };
 
 export default function RootLayout({
@@ -13,8 +31,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html
+      lang="en"
+      className={`${firaSans.variable} ${firaCode.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-screen antialiased">{children}</body>
     </html>
   );
 }

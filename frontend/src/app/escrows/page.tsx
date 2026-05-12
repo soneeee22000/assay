@@ -1,23 +1,39 @@
 "use client";
 
+import {
+  CheckCircle2,
+  ChevronRight,
+  Coins,
+  Inbox,
+  Lock,
+  RefreshCw,
+  Workflow,
+} from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { AuthGate } from "@/components/auth-gate";
 import { DashboardShell } from "@/components/dashboard-shell";
+import {
+  Badge,
+  Button,
+  Card,
+  CardHeader,
+  EmptyState,
+  ErrorRow,
+  KpiCard,
+  LoadingRow,
+} from "@/components/ui";
 import {
   ApiError,
   fetchAuditExport,
   type DomainEvent,
   type Escrow,
 } from "@/lib/api";
-import {
-  escrowStateClasses,
-  formatRelative,
-  truncateMiddle,
-} from "@/lib/format";
+import { formatRelative, truncateMiddle } from "@/lib/format";
 
 const WINDOW_HOURS = 24;
+
 const STATE_ORDER: Escrow["state"][] = [
   "PENDING",
   "FUNDS_LOCKED",
@@ -27,6 +43,22 @@ const STATE_ORDER: Escrow["state"][] = [
   "CANCELLED",
   "REFUNDED",
 ];
+
+const STATE_META: Record<
+  Escrow["state"],
+  {
+    tone: "neutral" | "primary" | "accent" | "success" | "danger";
+    label: string;
+  }
+> = {
+  PENDING: { tone: "neutral", label: "Pending" },
+  FUNDS_LOCKED: { tone: "primary", label: "Funds locked" },
+  VAULT_ATTESTED: { tone: "primary", label: "Vault attested" },
+  CERTIFICATE_MINTED: { tone: "accent", label: "Certificate minted" },
+  RELEASED: { tone: "success", label: "Released" },
+  CANCELLED: { tone: "neutral", label: "Cancelled" },
+  REFUNDED: { tone: "danger", label: "Refunded" },
+};
 
 type EscrowSummary = {
   escrow_id: string;
@@ -42,9 +74,7 @@ type EscrowSummary = {
 export default function EscrowsPage() {
   return (
     <AuthGate>
-      <DashboardShell>
-        <EscrowsList />
-      </DashboardShell>
+      <EscrowsList />
     </AuthGate>
   );
 }
@@ -54,7 +84,9 @@ function EscrowsList() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setLoading(true);
+    setError(null);
     const to = new Date();
     const from = new Date(to.getTime() - WINDOW_HOURS * 60 * 60 * 1000);
     fetchAuditExport({ from: from.toISOString(), to: to.toISOString() })
@@ -66,87 +98,149 @@ function EscrowsList() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return <p className="font-mono text-sm text-muted-foreground">Loading…</p>;
-  }
+  useEffect(() => {
+    load();
+  }, [load]);
 
-  if (error) {
-    return (
-      <p
-        role="alert"
-        className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger"
-      >
-        {error}
-      </p>
+  const stats = useMemo(() => {
+    const released = escrows.filter((e) => e.state === "RELEASED").length;
+    const active = escrows.filter(
+      (e) =>
+        e.state !== "RELEASED" &&
+        e.state !== "CANCELLED" &&
+        e.state !== "REFUNDED",
+    ).length;
+    const totalUsdc = escrows.reduce(
+      (sum, e) => sum + Number.parseFloat(e.amount ?? "0"),
+      0,
     );
-  }
-
-  if (escrows.length === 0) {
-    return (
-      <div className="rounded-md border border-border bg-muted/50 px-4 py-6 text-sm text-muted-foreground">
-        No escrows opened in the last {WINDOW_HOURS} hours. Open one via{" "}
-        <code className="font-mono text-xs">POST /api/v1/escrows</code>.
-      </div>
-    );
-  }
+    return { total: escrows.length, released, active, totalUsdc };
+  }, [escrows]);
 
   return (
-    <div className="space-y-3">
-      <header className="flex items-baseline justify-between">
-        <h2 className="text-lg font-semibold tracking-tight">Escrows</h2>
-        <span className="font-mono text-xs text-muted-foreground">
-          {escrows.length} · last {WINDOW_HOURS}h
-        </span>
-      </header>
+    <DashboardShell
+      title="Escrows"
+      description={`Custodian-backed escrow lifecycle. Showing escrows opened in the last ${WINDOW_HOURS} hours.`}
+      actions={
+        <Button
+          variant="secondary"
+          size="sm"
+          leadingIcon={RefreshCw}
+          onClick={load}
+          disabled={loading}
+        >
+          Refresh
+        </Button>
+      }
+    >
+      <div className="grid gap-3 sm:grid-cols-4">
+        <KpiCard
+          label="Total escrows"
+          value={stats.total}
+          hint={`last ${WINDOW_HOURS}h`}
+          icon={Workflow}
+          tone="primary"
+        />
+        <KpiCard
+          label="In flight"
+          value={stats.active}
+          hint="non-terminal"
+          icon={Lock}
+          tone="primary"
+        />
+        <KpiCard
+          label="Released"
+          value={stats.released}
+          hint="terminal"
+          icon={CheckCircle2}
+          tone="success"
+        />
+        <KpiCard
+          label="Volume"
+          value={`${stats.totalUsdc.toFixed(2)} USDC`}
+          hint="across all escrows"
+          icon={Coins}
+          tone="accent"
+        />
+      </div>
 
-      <ul className="grid gap-3 sm:grid-cols-2">
-        {escrows.map((escrow) => (
-          <li
-            key={escrow.escrow_id}
-            className="rounded-md border border-border bg-muted/30 p-4"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <Link
-                href={`/escrows/${escrow.escrow_id}`}
-                className="font-mono text-xs text-foreground hover:text-primary"
-              >
-                {truncateMiddle(escrow.escrow_id, 8, 6)}
-              </Link>
-              <span
-                className={`rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide ${escrowStateClasses(
-                  escrow.state,
-                )}`}
-              >
-                {escrow.state}
+      <Card className="mt-6">
+        <CardHeader>
+          <h2 className="text-sm font-semibold text-foreground">Escrow list</h2>
+          <Badge tone="neutral">{escrows.length}</Badge>
+        </CardHeader>
+
+        {loading ? (
+          <LoadingRow label="Loading escrows…" />
+        ) : error ? (
+          <div className="p-4">
+            <ErrorRow title="Failed to load escrows" detail={error} />
+          </div>
+        ) : escrows.length === 0 ? (
+          <div className="p-4">
+            <EmptyState
+              icon={Inbox}
+              title="No escrows in this window"
+              description={
+                <>
+                  Open one via{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">
+                    POST /api/v1/escrows
+                  </code>{" "}
+                  or run the seed script.
+                </>
+              }
+            />
+          </div>
+        ) : (
+          <ul className="divide-y divide-border">
+            {escrows.map((escrow) => (
+              <EscrowRow key={escrow.escrow_id} escrow={escrow} />
+            ))}
+          </ul>
+        )}
+      </Card>
+    </DashboardShell>
+  );
+}
+
+function EscrowRow({ escrow }: { escrow: EscrowSummary }) {
+  const meta = STATE_META[escrow.state];
+  return (
+    <li>
+      <Link
+        href={`/escrows/${escrow.escrow_id}`}
+        className="group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-muted/40"
+      >
+        <div className="flex-1 min-w-0 space-y-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <code className="font-mono text-sm font-medium text-foreground">
+              {truncateMiddle(escrow.escrow_id, 10, 6)}
+            </code>
+            <Badge tone={meta.tone}>{meta.label}</Badge>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] text-foreground-muted">
+            {escrow.amount ? (
+              <span className="text-foreground">
+                <span className="text-foreground-muted">amount </span>
+                <span className="tabular-nums">{escrow.amount}</span> USDC
               </span>
-            </div>
-
-            <div className="mt-3 space-y-1 text-sm">
-              {escrow.amount ? (
-                <p>
-                  <span className="text-muted-foreground">Amount: </span>
-                  <span className="font-medium">{escrow.amount} USDC</span>
-                </p>
-              ) : null}
-              {escrow.buyer_id ? (
-                <p className="font-mono text-xs text-muted-foreground">
-                  Buyer {truncateMiddle(escrow.buyer_id)}
-                </p>
-              ) : null}
-              {escrow.seller_id ? (
-                <p className="font-mono text-xs text-muted-foreground">
-                  Seller {truncateMiddle(escrow.seller_id)}
-                </p>
-              ) : null}
-            </div>
-
-            <p className="mt-3 font-mono text-[11px] text-muted-foreground">
-              Last update {formatRelative(escrow.last_event_at)}
-            </p>
-          </li>
-        ))}
-      </ul>
-    </div>
+            ) : null}
+            {escrow.buyer_id ? (
+              <span>buyer {truncateMiddle(escrow.buyer_id)}</span>
+            ) : null}
+            {escrow.seller_id ? (
+              <span>seller {truncateMiddle(escrow.seller_id)}</span>
+            ) : null}
+            <span>updated {formatRelative(escrow.last_event_at)}</span>
+          </div>
+        </div>
+        <ChevronRight
+          className="h-4 w-4 shrink-0 text-foreground-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
+          aria-hidden
+        />
+      </Link>
+    </li>
   );
 }
 

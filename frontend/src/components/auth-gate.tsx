@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 
+import { Spinner } from "@/components/ui";
 import { useAuth } from "@/lib/useAuth";
 
 export function AuthGate({ children }: { children: ReactNode }) {
@@ -15,20 +16,13 @@ export function AuthGate({ children }: { children: ReactNode }) {
     }
   }, [isReady, token, router]);
 
-  if (!isReady) {
+  if (!isReady || !token) {
     return (
-      <main className="mx-auto flex min-h-screen max-w-5xl items-center justify-center px-6">
-        <p className="font-mono text-sm text-muted-foreground">Loading…</p>
-      </main>
-    );
-  }
-
-  if (!token) {
-    return (
-      <main className="mx-auto flex min-h-screen max-w-5xl items-center justify-center px-6">
-        <p className="font-mono text-sm text-muted-foreground">
-          Redirecting to login…
-        </p>
+      <main className="grid min-h-screen place-items-center px-6">
+        <div className="flex items-center gap-2 text-sm text-foreground-muted">
+          <Spinner />
+          <span>{isReady ? "Redirecting…" : "Loading…"}</span>
+        </div>
       </main>
     );
   }

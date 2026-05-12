@@ -1,10 +1,23 @@
 "use client";
 
+import {
+  ArrowRight,
+  Award,
+  BookOpen,
+  CheckCircle2,
+  ExternalLink,
+  type LucideIcon,
+  ShieldCheck,
+  Workflow,
+  XCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { useAuth } from "@/lib/useAuth";
+import { BrandMark, Button, Card, Spinner } from "@/components/ui";
 import { fetchHealth } from "@/lib/api";
+import { cn } from "@/lib/cn";
+import { useAuth } from "@/lib/useAuth";
 
 type HealthStatus =
   | { kind: "loading" }
@@ -22,128 +35,199 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-6 px-6 py-12 sm:py-16">
-      <header className="space-y-2">
-        <p className="font-mono text-sm text-muted-foreground">
-          GemVault — v0.1.0
-        </p>
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          Reference RWA Fintech Control Surface
-        </h1>
-        <p className="max-w-prose text-muted-foreground">
-          Event-sourced ledger, on-chain certificates of authenticity, and
-          custodian-backed escrow lifecycle. Read-only dashboard wired to the
-          GemVault FastAPI backend.
-        </p>
+    <main className="min-h-screen bg-background">
+      <header className="border-b border-border bg-surface/70 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <BrandMark />
+          <div className="flex items-center gap-2">
+            <a
+              href="https://github.com/soneeee22000/gemvault"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-foreground-muted transition-colors hover:bg-muted hover:text-foreground"
+            >
+              GitHub
+              <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+            </a>
+            {isReady && token ? (
+              <Link
+                href="/ledger"
+                className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+              >
+                Open dashboard
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
+              >
+                Sign in
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
+            )}
+          </div>
+        </div>
       </header>
 
-      <BackendStatusBadge status={health} />
-
-      <nav className="grid gap-3 sm:grid-cols-3">
-        <DashboardLink
-          href="/ledger"
-          title="Ledger"
-          description="Event-sourced audit trail"
-        />
-        <DashboardLink
-          href="/certificates"
-          title="Certificates"
-          description="Minted on-chain"
-        />
-        <DashboardLink
-          href="/escrows"
-          title="Escrows"
-          description="Lifecycle timelines"
-        />
-      </nav>
-
-      <section className="rounded-md border border-border bg-muted/30 p-4 text-sm">
-        {!isReady ? (
-          <p className="font-mono text-xs text-muted-foreground">Loading…</p>
-        ) : token ? (
-          <p>
-            Signed in. Open any tab above, or{" "}
-            <Link href="/ledger" className="text-primary hover:underline">
-              jump to the ledger
-            </Link>
-            .
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-20">
+        <div className="space-y-6">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary-soft bg-primary-soft px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-primary-soft-foreground">
+            <ShieldCheck className="h-3 w-3" aria-hidden />
+            RWA fintech reference architecture
+          </span>
+          <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight text-foreground sm:text-5xl">
+            Event-sourced ledger meets on-chain certificates of authenticity.
+          </h1>
+          <p className="max-w-2xl text-base leading-relaxed text-foreground-muted sm:text-lg">
+            Physical high-value collectibles tokenised as ERC-721 certificates,
+            settled through a custodian-backed escrow lifecycle, on a
+            financial-grade event-sourced ledger. Built end-to-end across
+            Solidity, Python, and TypeScript.
           </p>
-        ) : (
-          <p>
-            Not signed in.{" "}
-            <Link href="/login" className="text-primary hover:underline">
-              Sign in
-            </Link>{" "}
-            to load data. See backend{" "}
+
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <Link
+              href={isReady && token ? "/ledger" : "/login"}
+              className="inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover"
+            >
+              {isReady && token ? "Open dashboard" : "Sign in to dashboard"}
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
             <a
               href="http://localhost:8000/docs"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="inline-flex h-11 items-center gap-2 rounded-md border border-border bg-surface px-5 text-sm font-medium text-foreground transition-colors hover:border-border-strong hover:bg-muted"
             >
-              /docs
-            </a>{" "}
-            to seed users + escrows.
-          </p>
-        )}
+              API docs
+              <ExternalLink className="h-4 w-4" aria-hidden />
+            </a>
+          </div>
+
+          <BackendStatusBadge status={health} />
+        </div>
+
+        <div className="mt-14 grid gap-4 sm:grid-cols-3">
+          <FeatureCard
+            href="/ledger"
+            icon={BookOpen}
+            title="Ledger"
+            description="Append-only event store. Deterministic replay, signed audit exports, full correlation tracing."
+          />
+          <FeatureCard
+            href="/escrows"
+            icon={Workflow}
+            title="Escrows"
+            description="Seven-state lifecycle from PENDING through RELEASED. Vault attestation gates every transfer."
+          />
+          <FeatureCard
+            href="/certificates"
+            icon={Award}
+            title="Certificates"
+            description="ERC-721 with attestation gate on Base. IPFS-pinned metadata, Basescan-verified source."
+          />
+        </div>
+
+        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { label: "Backend tests", value: "91", hint: "passing on CI" },
+            { label: "API endpoints", value: "11", hint: "FastAPI surface" },
+            { label: "Domain events", value: "13", hint: "audit-grade log" },
+            { label: "Escrow states", value: "7", hint: "with vault gate" },
+          ].map((stat) => (
+            <Card key={stat.label} className="px-4 py-4">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-foreground-muted">
+                {stat.label}
+              </p>
+              <p className="mt-1 font-mono text-2xl font-semibold tabular-nums tracking-tight text-foreground">
+                {stat.value}
+              </p>
+              <p className="text-xs text-foreground-muted">{stat.hint}</p>
+            </Card>
+          ))}
+        </div>
       </section>
 
-      <footer className="mt-auto border-t border-border pt-4 font-mono text-xs text-muted-foreground">
-        Open-source · MIT · GemVault reference architecture
+      <footer className="border-t border-border">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-2 px-4 py-6 font-mono text-[11px] text-foreground-subtle sm:flex-row sm:items-center sm:px-6">
+          <span>MIT · open-source · built by Pyae Sone Kyaw</span>
+          <span>v0.1.0 · 2026-05-12</span>
+        </div>
       </footer>
     </main>
   );
 }
 
-type DashboardLinkProps = {
+function FeatureCard({
+  href,
+  icon: Icon,
+  title,
+  description,
+}: {
   href: string;
+  icon: LucideIcon;
   title: string;
   description: string;
-};
-
-function DashboardLink({ href, title, description }: DashboardLinkProps) {
+}) {
   return (
-    <a
-      href={href}
-      className="rounded-lg border border-border bg-muted px-4 py-3 transition-colors hover:bg-primary hover:text-primary-foreground"
-    >
-      <p className="text-base font-medium">{title}</p>
-      <p className="mt-1 text-sm opacity-80">{description}</p>
-    </a>
+    <Link href={href} className="group block">
+      <Card className="h-full p-5 transition-all duration-150 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-md">
+        <div className="flex items-center justify-between">
+          <span className="grid h-9 w-9 place-items-center rounded-md bg-primary-soft text-primary-soft-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+            <Icon className="h-4 w-4" aria-hidden />
+          </span>
+          <ArrowRight
+            className="h-4 w-4 text-foreground-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
+            aria-hidden
+          />
+        </div>
+        <h3 className="mt-4 text-base font-semibold tracking-tight text-foreground">
+          {title}
+        </h3>
+        <p className="mt-1.5 text-sm leading-relaxed text-foreground-muted">
+          {description}
+        </p>
+      </Card>
+    </Link>
   );
 }
 
 function BackendStatusBadge({ status }: { status: HealthStatus }) {
-  if (status.kind === "loading") {
-    return (
-      <div className="flex items-center gap-2 rounded-md border border-border bg-muted/40 px-3 py-2 text-sm">
-        <span className="h-2 w-2 animate-pulse rounded-full bg-muted-foreground" />
-        <span className="font-mono text-xs text-muted-foreground">
-          Checking backend…
-        </span>
-      </div>
-    );
-  }
-  if (status.kind === "down") {
-    return (
-      <div className="flex items-center gap-2 rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm">
-        <span className="h-2 w-2 rounded-full bg-danger" />
-        <span className="font-mono text-xs text-danger">
-          Backend unreachable. Run{" "}
-          <code className="rounded bg-background/40 px-1">
-            uvicorn gemvault.main:app
-          </code>
-          .
-        </span>
-      </div>
-    );
-  }
+  const config = {
+    loading: {
+      icon: Spinner,
+      tone: "border-border bg-muted text-foreground-muted",
+      label: "Checking backend…",
+    },
+    ok: {
+      icon: CheckCircle2,
+      tone: "border-success-soft bg-success-soft text-success",
+      label: status.kind === "ok" ? `Backend healthy · v${status.version}` : "",
+    },
+    down: {
+      icon: XCircle,
+      tone: "border-danger-soft bg-danger-soft text-danger",
+      label: "Backend unreachable — start uvicorn on :8000",
+    },
+  } as const;
+
+  const c = config[status.kind];
+  const Icon = c.icon;
+
   return (
-    <div className="flex items-center gap-2 rounded-md border border-success/30 bg-success/10 px-3 py-2 text-sm">
-      <span className="h-2 w-2 rounded-full bg-success" />
-      <span className="font-mono text-xs text-success">
-        Backend healthy · v{status.version}
-      </span>
+    <div
+      className={cn(
+        "inline-flex items-center gap-2 rounded-md border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider",
+        c.tone,
+      )}
+    >
+      {status.kind === "loading" ? (
+        <Spinner className="h-3.5 w-3.5" />
+      ) : (
+        <Icon className="h-3.5 w-3.5" aria-hidden />
+      )}
+      {c.label}
     </div>
   );
 }

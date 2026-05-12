@@ -1,42 +1,147 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: oklch(0.99 0.005 240);
-  --color-foreground: oklch(0.18 0.02 240);
+  /* Surfaces — slate scale, cool neutrals */
+  --color-background: oklch(0.985 0.005 250);
+  --color-surface: oklch(1 0 0);
+  --color-surface-elevated: oklch(1 0 0);
+  --color-muted: oklch(0.97 0.01 250);
+  --color-input: oklch(0.965 0.012 250);
+  --color-border: oklch(0.92 0.012 250);
+  --color-border-strong: oklch(0.87 0.014 250);
 
-  --color-primary: oklch(0.55 0.18 250);
-  --color-primary-foreground: oklch(0.98 0.005 240);
+  /* Text */
+  --color-foreground: oklch(0.23 0.03 250);
+  --color-foreground-muted: oklch(0.55 0.025 250);
+  --color-foreground-subtle: oklch(0.68 0.02 250);
 
-  --color-muted: oklch(0.95 0.01 240);
-  --color-muted-foreground: oklch(0.45 0.02 240);
+  /* Primary — blue 600 */
+  --color-primary: oklch(0.55 0.21 258);
+  --color-primary-hover: oklch(0.5 0.22 258);
+  --color-primary-foreground: oklch(0.99 0 0);
+  --color-primary-soft: oklch(0.95 0.04 258);
+  --color-primary-soft-foreground: oklch(0.42 0.21 258);
 
-  --color-border: oklch(0.92 0.01 240);
-  --color-input: oklch(0.95 0.01 240);
+  /* Accent — amber 600, WCAG-tuned */
+  --color-accent: oklch(0.72 0.18 65);
+  --color-accent-soft: oklch(0.95 0.06 75);
+  --color-accent-soft-foreground: oklch(0.55 0.15 65);
 
-  --color-success: oklch(0.65 0.16 145);
-  --color-warning: oklch(0.75 0.16 75);
-  --color-danger: oklch(0.6 0.2 25);
+  /* Semantic */
+  --color-success: oklch(0.62 0.16 150);
+  --color-success-soft: oklch(0.94 0.06 150);
+  --color-warning: oklch(0.72 0.18 75);
+  --color-warning-soft: oklch(0.95 0.07 75);
+  --color-danger: oklch(0.6 0.22 25);
+  --color-danger-soft: oklch(0.95 0.06 25);
 
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
+  /* Fonts (variables set by next/font in layout.tsx) */
+  --font-sans:
+    var(--font-fira-sans), "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono:
+    var(--font-fira-code), "JetBrains Mono", "SF Mono", Consolas, monospace;
+
+  /* Type ramp */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
+  /* Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Shadows — subtle, premium */
+  --shadow-xs: 0 1px 1px oklch(0.2 0.03 250 / 0.04);
+  --shadow-sm:
+    0 1px 2px oklch(0.2 0.03 250 / 0.05), 0 1px 3px oklch(0.2 0.03 250 / 0.04);
+  --shadow-md:
+    0 2px 4px oklch(0.2 0.03 250 / 0.05), 0 4px 8px oklch(0.2 0.03 250 / 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
   @theme {
-    --color-background: oklch(0.15 0.02 240);
-    --color-foreground: oklch(0.95 0.005 240);
+    --color-background: oklch(0.14 0.02 250);
+    --color-surface: oklch(0.18 0.022 250);
+    --color-surface-elevated: oklch(0.21 0.024 250);
+    --color-muted: oklch(0.22 0.022 250);
+    --color-input: oklch(0.2 0.022 250);
+    --color-border: oklch(0.28 0.022 250);
+    --color-border-strong: oklch(0.34 0.022 250);
 
-    --color-muted: oklch(0.22 0.02 240);
-    --color-muted-foreground: oklch(0.65 0.02 240);
+    --color-foreground: oklch(0.96 0.005 250);
+    --color-foreground-muted: oklch(0.7 0.02 250);
+    --color-foreground-subtle: oklch(0.55 0.025 250);
 
-    --color-border: oklch(0.28 0.02 240);
-    --color-input: oklch(0.22 0.02 240);
+    --color-primary: oklch(0.65 0.2 258);
+    --color-primary-hover: oklch(0.7 0.2 258);
+    --color-primary-foreground: oklch(0.99 0 0);
+    --color-primary-soft: oklch(0.3 0.1 258);
+    --color-primary-soft-foreground: oklch(0.85 0.12 258);
+
+    --color-accent: oklch(0.78 0.16 75);
+    --color-accent-soft: oklch(0.35 0.1 75);
+    --color-accent-soft-foreground: oklch(0.85 0.12 75);
+
+    --color-success: oklch(0.72 0.15 150);
+    --color-success-soft: oklch(0.3 0.08 150);
+    --color-warning: oklch(0.78 0.16 75);
+    --color-warning-soft: oklch(0.35 0.1 75);
+    --color-danger: oklch(0.7 0.2 25);
+    --color-danger-soft: oklch(0.32 0.1 25);
+
+    --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.4), 0 1px 3px oklch(0 0 0 / 0.3);
+    --shadow-md: 0 2px 4px oklch(0 0 0 / 0.4), 0 4px 12px oklch(0 0 0 / 0.5);
   }
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  color-scheme: light dark;
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01", "ss03";
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Tabular numbers everywhere we show data */
+.tabular-nums,
+code,
+kbd,
+samp,
+pre,
+.font-mono {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus ring — uniform, accessible */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

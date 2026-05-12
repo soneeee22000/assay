@@ -1,66 +1,140 @@
 "use client";
 
+import {
+  type LucideIcon,
+  Award,
+  BookOpen,
+  LogOut,
+  Workflow,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode } from "react";
 
+import { BrandMark, Button } from "@/components/ui";
+import { cn } from "@/lib/cn";
 import { useAuth } from "@/lib/useAuth";
 
-const NAV: { href: string; label: string }[] = [
-  { href: "/ledger", label: "Ledger" },
-  { href: "/certificates", label: "Certificates" },
-  { href: "/escrows", label: "Escrows" },
+type NavItem = { href: string; label: string; icon: LucideIcon };
+
+const NAV: NavItem[] = [
+  { href: "/ledger", label: "Ledger", icon: BookOpen },
+  { href: "/escrows", label: "Escrows", icon: Workflow },
+  { href: "/certificates", label: "Certificates", icon: Award },
 ];
 
-export function DashboardShell({ children }: { children: ReactNode }) {
+export function DashboardShell({
+  title,
+  description,
+  actions,
+  children,
+}: {
+  title: string;
+  description?: string;
+  actions?: ReactNode;
+  children: ReactNode;
+}) {
   const pathname = usePathname();
   const { signOut } = useAuth();
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 sm:py-10">
-      <header className="flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-1">
-          <p className="font-mono text-xs text-muted-foreground">
-            GemVault — Admin Dashboard
-          </p>
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Reference RWA Fintech Control Surface
-          </h1>
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-20 border-b border-border bg-surface/85 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <Link
+            href="/"
+            className="rounded-md transition-opacity hover:opacity-80"
+          >
+            <BrandMark />
+          </Link>
+
+          <nav className="hidden items-center gap-1 sm:flex">
+            {NAV.map((item) => {
+              const active = pathname?.startsWith(item.href);
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150",
+                    active
+                      ? "bg-primary-soft text-primary-soft-foreground"
+                      : "text-foreground-muted hover:bg-muted hover:text-foreground",
+                  )}
+                >
+                  <Icon className="h-4 w-4" aria-hidden />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            leadingIcon={LogOut}
+            onClick={signOut}
+            aria-label="Sign out"
+          >
+            <span className="hidden sm:inline">Sign out</span>
+          </Button>
         </div>
-        <button
-          type="button"
-          onClick={signOut}
-          className="self-start rounded-md border border-border bg-input px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted sm:self-end"
-        >
-          Sign out
-        </button>
+
+        <nav className="flex gap-1 overflow-x-auto border-t border-border px-4 py-2 sm:hidden">
+          {NAV.map((item) => {
+            const active = pathname?.startsWith(item.href);
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "inline-flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150",
+                  active
+                    ? "bg-primary-soft text-primary-soft-foreground"
+                    : "text-foreground-muted hover:bg-muted hover:text-foreground",
+                )}
+              >
+                <Icon className="h-4 w-4" aria-hidden />
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
       </header>
 
-      <nav className="flex gap-2 overflow-x-auto">
-        {NAV.map((item) => {
-          const active = pathname?.startsWith(item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={
-                "rounded-md px-3 py-2 text-sm font-medium transition-colors " +
-                (active
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-input hover:text-foreground")
-              }
-            >
-              {item.label}
-            </Link>
-          );
-        })}
-      </nav>
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10">
+        <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+              {title}
+            </h1>
+            {description ? (
+              <p className="max-w-2xl text-sm text-foreground-muted">
+                {description}
+              </p>
+            ) : null}
+          </div>
+          {actions ? (
+            <div className="flex shrink-0 gap-2">{actions}</div>
+          ) : null}
+        </div>
 
-      <section className="flex-1">{children}</section>
+        {children}
 
-      <footer className="border-t border-border pt-4 font-mono text-xs text-muted-foreground">
-        Read-only view · Powered by the GemVault FastAPI backend
-      </footer>
-    </main>
+        <footer className="mt-12 border-t border-border pt-4 font-mono text-[11px] text-foreground-subtle">
+          Read-only · powered by the GemVault FastAPI backend ·{" "}
+          <a
+            href="https://github.com/soneeee22000/gemvault"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground-muted hover:text-foreground"
+          >
+            github.com/soneeee22000/gemvault
+          </a>
+        </footer>
+      </main>
+    </div>
   );
 }
