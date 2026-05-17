@@ -12,6 +12,14 @@
 [![Tailwind](https://img.shields.io/badge/tailwind-4-06b6d4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Last Commit](https://img.shields.io/github/last-commit/soneeee22000/assay)](https://github.com/soneeee22000/assay/commits/main)
 
+## Why Assay exists
+
+A gold or silver bar can sit in a custodian's vault for years — but it is only worth what its owner can _prove_ and _transfer_. Today that proof is paper: a PDF, a custodian's spreadsheet row. Paper can be lost, forged, or quietly pledged as collateral twice. Trades settle on a handshake through an intermediary nobody audits, and provenance — who held the bar, who attested it, when it moved — is scattered across systems and reconstructable only after something goes wrong.
+
+Assay is a reference architecture for doing it properly: every bar becomes an on-chain certificate of authenticity, ownership changes hands through custodian-backed escrow, and every state change lands on an event-sourced ledger a regulator could audit end to end.
+
+## What it is
+
 Assay tokenises vaulted precious metals (allocated gold and silver bullion as the worked example) as ERC-721 certificates of authenticity, settled through a custodian-backed escrow lifecycle, on an event-sourced double-entry ledger. Built end-to-end across Solidity, Python, and TypeScript — one repo, one demo, all the layers a fintech-meets-RWA platform actually needs to ship.
 
 The wedge for engineers applying to RWA fintech roles: telecom event-pipeline experience (CDR / SMPP, Kafka) and healthcare compliance work port directly into financial event-sourcing and regulated audit trails — a combination rare on the typical Web3 application stack.
