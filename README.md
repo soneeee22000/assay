@@ -20,8 +20,8 @@ The wedge for engineers applying to RWA fintech roles: telecom event-pipeline ex
 
 | Surface                                 | URL                                                                                                                |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **Dashboard**                           | _Vercel deploy pending_                                                                                            |
-| **API + OpenAPI docs**                  | _Railway deploy pending_                                                                                           |
+| **Dashboard**                           | <https://assay-nine.vercel.app>                                                                                    |
+| **API + OpenAPI docs**                  | <https://assay-api-production.up.railway.app/docs>                                                                 |
 | **Certificate contract** — Base Sepolia | [`0xdC40…Ae30`](https://sepolia.basescan.org/address/0xdC409dBC3eb2824F2a7c7a1D0Cec2aeD34dAAe30) (verified source) |
 
 Sign in with `admin@example.com` / `adminpass1234`. The dashboard is pre-seeded with a full escrow lifecycle — Opened → Funds locked → Vault attested → Certificate minted → Released — visible across the Ledger, Escrows, and Certificates views.
