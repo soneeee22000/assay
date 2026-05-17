@@ -18,6 +18,8 @@ The wedge for engineers applying to RWA fintech roles: telecom event-pipeline ex
 
 ## Live Demo
 
+![Assay dashboard walk-through](docs/demo.gif)
+
 | Surface                                 | URL                                                                                                                |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | **Dashboard**                           | <https://assay-nine.vercel.app>                                                                                    |
