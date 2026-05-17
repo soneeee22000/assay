@@ -9,7 +9,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ### Changed
 
 - **Project repositioned: GemVault → Assay.** Renamed end-to-end — Python package `gemvault` → `assay`, smart contract `GemVaultCertificate` → `AssayCertificate` (ERC-721 symbol `GVC` → `ASC`), the GitHub repository, environment variables, and the HMAC webhook headers (`X-GemVault-*` → `X-Assay-*`). Re-themed from gemstone RWA tokenisation to vaulted precious-metals / allocated-bullion custody: the `Asset` domain now models gold and silver bars, the weight field is `weight_troy_oz` (was `weight_carats`), and `lab_cert_number` carries an LBMA-accredited assayer reference. The escrow lifecycle, event-sourced ledger, and certificate mechanics are unchanged — the rename is copy and identifiers.
-- `AssayCertificate` redeployed and source-verified on Base Sepolia at `0xdC409dBC3eb2824F2a7c7a1D0Cec2aeD34dAAe30`, replacing the previous deployment. Railway and Vercel are still being re-provisioned under the new name; the README Live Demo section lists those two surfaces as pending.
+- Live deployment re-provisioned under the new name: dashboard on Vercel (<https://assay-nine.vercel.app>), API + managed Postgres on Railway (<https://assay-api-production.up.railway.app>), and `AssayCertificate` redeployed and source-verified on Base Sepolia at `0xdC409dBC3eb2824F2a7c7a1D0Cec2aeD34dAAe30`. The live backend is pre-seeded with a full escrow lifecycle.
 
 ### Added
 
