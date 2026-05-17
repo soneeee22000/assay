@@ -8,14 +8,22 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Added
 
+- Live deployment — dashboard on Vercel (<https://gemvault-delta.vercel.app>), API + managed Postgres on Railway, and `GemVaultCertificate` deployed and source-verified on Base Sepolia (`0x56E9…0508`). Live URLs and a recorded demo GIF now sit in the README.
+- `.github/workflows/verify-contract.yml` — manual-dispatch contract source verification, so an already-deployed address can be verified without a redeploy.
+- Env-driven CORS — a `CORS_ORIGINS` variable lets the live frontend origin be set at deploy time instead of being hardcoded in `main.py`.
+- `frontend/e2e/record.spec.ts` + `frontend/playwright.config.ts` — Playwright walk-through that records the demo GIF against the live deploy.
 - Premium UX pass on the admin dashboard — Fira Sans / Fira Code typography via `next/font/google`, Lucide-React iconography throughout, blue-centric primary with amber accent oklch tokens, KPI cards on every page, full dark-mode token set, uniform 2px focus ring, `prefers-reduced-motion` support. New primitive layer in `frontend/src/components/ui.tsx` (Button · Badge · Card · KpiCard · EmptyState · Spinner · LoadingRow · ErrorRow · BrandMark).
 - `GETTING-STARTED.md` — step-by-step local runbook with troubleshooting table.
 - Annotated `backend/.env.example` linking each production-only signup (Alchemy · Coinbase Developer Platform · Basescan · Pinata · Railway · Vercel) to its purpose.
-- Sprint 6 deploy scaffolding: `backend/railway.toml`, `frontend/vercel.json`, `.github/workflows/deploy-contract.yml` (manual-dispatch Foundry deploy on Base Sepolia with secrets), `scripts/demo/seed.py` (drives a full escrow lifecycle), `scripts/demo/record.spec.ts` (Playwright demo recording).
+- Sprint 6 deploy scaffolding: `backend/railway.toml`, `frontend/vercel.json`, `.github/workflows/deploy-contract.yml` (manual-dispatch Foundry deploy on Base Sepolia with secrets), `scripts/demo/seed.py` (drives a full escrow lifecycle), `frontend/e2e/record.spec.ts` (Playwright demo recording).
 - `docs/DEPLOY.md` — end-to-end Railway + Vercel + Foundry deploy recipe with cost estimate.
 
 ### Fixed
 
+- Etherscan retired its V1 API; `contracts/foundry.toml` now lets Foundry resolve the Etherscan V2 endpoint, so `forge` contract source verification succeeds.
+- `backend/Dockerfile` copies `README.md` into the image — Hatchling needs it for package metadata, so the Railway build no longer fails at `pip install -e .`.
+- `backend/railway.toml` — healthcheck window widened to 300s for a cold Python container, and the start command wrapped in `sh -c` so Railway expands `$PORT`.
+- `gemvault.main` no longer instantiates `Settings` at import time, so importing the app never requires runtime secrets (unblocked CI test collection).
 - `docker-compose` Postgres now binds `5433:5432` to side-step machines that already run a native PostgreSQL service on `:5432`.
 - `alembic env.py` loads `backend/.env` on its own via a minimal stdlib parser so `alembic upgrade head` works without pre-exporting `DATABASE_URL`.
 - `scripts/demo/seed.py` forces stdout to UTF-8 at startup; Windows `cp1252` consoles no longer crash on the script's `→` arrows.
