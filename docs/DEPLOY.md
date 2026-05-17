@@ -97,14 +97,14 @@ With both deploys up and seed data loaded:
 ```bash
 cd frontend
 npx playwright install chromium  # one-time
-FRONTEND_URL=https://<your-vercel-url> \
-  npx playwright test ../scripts/demo/record.spec.ts --headed
+FRONTEND_URL=https://<your-vercel-url> npx playwright test
 ```
 
+The spec is `frontend/e2e/record.spec.ts` (config: `frontend/playwright.config.ts`).
 Convert the resulting WebM to GIF for the README:
 
 ```bash
-ffmpeg -i test-results/.../video.webm -vf "fps=12,scale=960:-1" docs/demo.gif
+ffmpeg -i e2e/.artifacts/*/video.webm -vf "fps=12,scale=960:-1:flags=lanczos" ../docs/demo.gif
 ```
 
 ## 6. Update README

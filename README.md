@@ -18,6 +18,8 @@ The wedge for engineers applying to RWA fintech roles: telecom event-pipeline ex
 
 ## Live Demo
 
+![GemVault dashboard walk-through](docs/demo.gif)
+
 | Surface                                 | URL                                                                                                                |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | **Dashboard**                           | <https://gemvault-delta.vercel.app>                                                                                |
@@ -182,6 +184,7 @@ gemvault/
 │   └── src/
 │       ├── app/                        login · ledger · escrows/[id] · certificates
 │       ├── components/                 ui.tsx (primitives) · dashboard-shell · auth-gate
+│       ├── e2e/record.spec.ts          Playwright dashboard walk-through (demo GIF)
 │       └── lib/                        api client · cn helper · useAuth hook
 ├── docs/
 │   ├── PRD-GEMVAULT.md                 Product spec + sprint plan
@@ -190,8 +193,7 @@ gemvault/
 │   ├── openapi.yaml                    Full API surface
 │   └── DEPLOY.md                       Railway + Vercel + Foundry deploy recipe
 ├── scripts/demo/
-│   ├── seed.py                         Drives a full escrow lifecycle for demos
-│   └── record.spec.ts                  Playwright dashboard walk-through
+│   └── seed.py                         Drives a full escrow lifecycle for demos
 ├── .github/workflows/
 │   ├── ci.yml                          Backend + Contracts + Frontend matrix
 │   └── deploy-contract.yml             Manual-dispatch Foundry deploy with secrets
@@ -207,7 +209,7 @@ End-to-end recipe in [`docs/DEPLOY.md`](./docs/DEPLOY.md):
 2. **Backend + Postgres** — Railway via the supplied `railway.toml` + Dockerfile
 3. **Frontend** — Vercel via `vercel --prod`
 4. **Demo data** — `python scripts/demo/seed.py` against the live backend
-5. **Demo GIF** — Playwright recording via `scripts/demo/record.spec.ts`
+5. **Demo GIF** — Playwright recording via `frontend/e2e/record.spec.ts`
 
 Cost estimate for a 24/7 demo deploy: **~$5/month** (Railway Hobby covers backend + Postgres; Vercel free tier; Base Sepolia is free).
 
