@@ -13,7 +13,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from gemvault.adapters.persistence import Base, get_sessionmaker
+from assay.adapters.persistence import Base, get_sessionmaker
 
 try:
     from testcontainers.postgres import PostgresContainer

@@ -1,8 +1,8 @@
-# GemVault
+# Assay
 
 > Reference RWA fintech architecture — physical-asset certificates of authenticity, custodian-backed escrow, on a financial-grade event-sourced ledger.
 
-[![CI](https://github.com/soneeee22000/gemvault/actions/workflows/ci.yml/badge.svg)](https://github.com/soneeee22000/gemvault/actions/workflows/ci.yml)
+[![CI](https://github.com/soneeee22000/assay/actions/workflows/ci.yml/badge.svg)](https://github.com/soneeee22000/assay/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12-3776ab?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/fastapi-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -10,21 +10,19 @@
 [![Next.js](https://img.shields.io/badge/next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![Postgres](https://img.shields.io/badge/postgres-16-4169e1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Tailwind](https://img.shields.io/badge/tailwind-4-06b6d4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Last Commit](https://img.shields.io/github/last-commit/soneeee22000/gemvault)](https://github.com/soneeee22000/gemvault/commits/main)
+[![Last Commit](https://img.shields.io/github/last-commit/soneeee22000/assay)](https://github.com/soneeee22000/assay/commits/main)
 
-GemVault tokenises physical high-value collectibles (gemstones as the worked example) as ERC-721 certificates of authenticity, settled through a custodian-backed escrow lifecycle, on an event-sourced double-entry ledger. Built end-to-end across Solidity, Python, and TypeScript — one repo, one demo, all the layers a fintech-meets-RWA platform actually needs to ship.
+Assay tokenises vaulted precious metals (allocated gold and silver bullion as the worked example) as ERC-721 certificates of authenticity, settled through a custodian-backed escrow lifecycle, on an event-sourced double-entry ledger. Built end-to-end across Solidity, Python, and TypeScript — one repo, one demo, all the layers a fintech-meets-RWA platform actually needs to ship.
 
 The wedge for engineers applying to RWA fintech roles: telecom event-pipeline experience (CDR / SMPP, Kafka) and healthcare compliance work port directly into financial event-sourcing and regulated audit trails — a combination rare on the typical Web3 application stack.
 
 ## Live Demo
 
-![GemVault dashboard walk-through](docs/demo.gif)
-
-| Surface                                 | URL                                                                                                                |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **Dashboard**                           | <https://gemvault-delta.vercel.app>                                                                                |
-| **API + OpenAPI docs**                  | <https://gemvault-api-production.up.railway.app/docs>                                                              |
-| **Certificate contract** — Base Sepolia | [`0x56E9…0508`](https://sepolia.basescan.org/address/0x56E9E95795b258ebFe410E687847853e5E6A0508) (verified source) |
+| Surface                                 | URL                                                                 |
+| --------------------------------------- | ------------------------------------------------------------------- |
+| **Dashboard**                           | _Vercel deploy pending_                                             |
+| **API + OpenAPI docs**                  | _Railway deploy pending_                                            |
+| **Certificate contract** — Base Sepolia | `AssayCertificate` — deploy pending (manual-dispatch deploy Action) |
 
 Sign in with `admin@example.com` / `adminpass1234`. The dashboard is pre-seeded with a full escrow lifecycle — Opened → Funds locked → Vault attested → Certificate minted → Released — visible across the Ledger, Escrows, and Certificates views.
 
@@ -49,7 +47,7 @@ flowchart TB
     end
 
     subgraph OnChain["Base Sepolia"]
-        Cert["GemVaultCertificate.sol<br/>ERC-721 + vault-attestation gate"]
+        Cert["AssayCertificate.sol<br/>ERC-721 + vault-attestation gate"]
         USDC["USDC<br/>(ERC-20)"]
     end
 
@@ -128,7 +126,7 @@ python -m venv .venv && .venv\Scripts\activate     # PowerShell on Windows
 pip install -e ".[dev]"
 copy .env.example .env                              # generate JWT_SECRET inside
 alembic upgrade head
-uvicorn gemvault.main:app --reload --port 8000      # → http://localhost:8000/docs
+uvicorn assay.main:app --reload --port 8000      # → http://localhost:8000/docs
 
 # 3. Drive an escrow lifecycle so the dashboard has data
 cd ..
@@ -164,9 +162,9 @@ The full OpenAPI spec is at [`docs/openapi.yaml`](./docs/openapi.yaml). Live `/d
 ## Project Structure
 
 ```
-gemvault/
+assay/
 ├── backend/                            FastAPI · SQLAlchemy 2 async · Postgres
-│   ├── src/gemvault/
+│   ├── src/assay/
 │   │   ├── domain/                     Pure-Python entities, events, value objects
 │   │   ├── application/                Use-cases (register · kyc · escrow lifecycle)
 │   │   └── adapters/
@@ -177,7 +175,7 @@ gemvault/
 │   │       └── webhook/                HMAC verifier + nonce cache
 │   └── tests/                          Domain unit + adapters integration (testcontainers)
 ├── contracts/                          Foundry workspace
-│   ├── src/GemVaultCertificate.sol     ERC-721 with vault-attestation gate
+│   ├── src/AssayCertificate.sol     ERC-721 with vault-attestation gate
 │   ├── script/Deploy.s.sol             forge script Deploy --broadcast --verify
 │   └── test/                           Unit + invariant tests
 ├── frontend/                           Next.js 16 App Router · Tailwind 4
@@ -187,7 +185,7 @@ gemvault/
 │       ├── e2e/record.spec.ts          Playwright dashboard walk-through (demo GIF)
 │       └── lib/                        api client · cn helper · useAuth hook
 ├── docs/
-│   ├── PRD-GEMVAULT.md                 Product spec + sprint plan
+│   ├── PRD-ASSAY.md                 Product spec + sprint plan
 │   ├── ARCHITECTURE.md                 System context · hexagonal · state machine · schema
 │   ├── adr/decisions.md                Four locked ADRs
 │   ├── openapi.yaml                    Full API surface
@@ -215,7 +213,7 @@ Cost estimate for a 24/7 demo deploy: **~$5/month** (Railway Hobby covers backen
 
 ## Decision Artefacts
 
-- [`docs/PRD-GEMVAULT.md`](./docs/PRD-GEMVAULT.md) — Product spec + sprint plan + risks
+- [`docs/PRD-ASSAY.md`](./docs/PRD-ASSAY.md) — Product spec + sprint plan + risks
 - [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — System context · hexagonal · state machine · schema
 - [`docs/adr/decisions.md`](./docs/adr/decisions.md) — ADR-001 ERC-721 · ADR-002 vault attestation · ADR-003 single events table · ADR-004 stub JWT
 - [`docs/openapi.yaml`](./docs/openapi.yaml) — Full API surface

@@ -93,7 +93,7 @@ class AssetRow(Base):
     asset_id: Mapped[UUID] = mapped_column(PgUUID(as_uuid=True), primary_key=True)
     asset_type: Mapped[str] = mapped_column(String(64), nullable=False)
     grade: Mapped[str | None] = mapped_column(String(32), nullable=True)
-    weight_carats: Mapped[Decimal | None] = mapped_column(Numeric(10, 3), nullable=True)
+    weight_troy_oz: Mapped[Decimal | None] = mapped_column(Numeric(10, 3), nullable=True)
     lab_cert_number: Mapped[str] = mapped_column(String(128), unique=True, nullable=False)
     photo_ipfs_hash: Mapped[str | None] = mapped_column(String(128), nullable=True)
     vault_location: Mapped[str] = mapped_column(String(64), nullable=False)

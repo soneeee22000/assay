@@ -10,7 +10,7 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from gemvault.adapters.persistence.models import Base
+from assay.adapters.persistence.models import Base
 
 
 def _load_dotenv() -> None:

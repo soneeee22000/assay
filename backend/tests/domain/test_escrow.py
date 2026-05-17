@@ -5,7 +5,7 @@ from uuid import uuid4
 
 import pytest
 
-from gemvault.domain import (
+from assay.domain import (
     Escrow,
     EscrowCancelled,
     EscrowOpened,
@@ -21,7 +21,7 @@ from gemvault.domain import (
     TxHash,
     VaultAttested,
 )
-from gemvault.domain.events import CertificateMinted
+from assay.domain.events import CertificateMinted
 
 
 class TestEscrowOpen:

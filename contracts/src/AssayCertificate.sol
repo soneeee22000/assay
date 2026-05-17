@@ -5,11 +5,11 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 
-/// @title GemVaultCertificate
+/// @title AssayCertificate
 /// @notice ERC-721 certificate of authenticity for physical assets. Transfers are
 ///         gated behind an off-chain vault attestation (recorded on-chain by the
 ///         platform's ATTESTER_ROLE). See docs/adr/decisions.md ADR-002.
-contract GemVaultCertificate is ERC721, AccessControl, Pausable {
+contract AssayCertificate is ERC721, AccessControl, Pausable {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant ATTESTER_ROLE = keccak256("ATTESTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -30,7 +30,7 @@ contract GemVaultCertificate is ERC721, AccessControl, Pausable {
     error TokenDoesNotExist(uint256 tokenId);
     error AlreadyAttested(uint256 tokenId);
 
-    constructor(address admin) ERC721("GemVault Certificate", "GVC") {
+    constructor(address admin) ERC721("Assay Certificate", "ASC") {
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(MINTER_ROLE, admin);
         _grantRole(ATTESTER_ROLE, admin);

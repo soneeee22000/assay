@@ -1,7 +1,7 @@
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
-const TOKEN_STORAGE_KEY = "gemvault_jwt";
+const TOKEN_STORAGE_KEY = "assay_jwt";
 
 export function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;

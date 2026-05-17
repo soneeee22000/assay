@@ -5,8 +5,8 @@ Usage (with the backend on :8000):
     python scripts/demo/seed.py
 
 Optional env:
-    GEMVAULT_API_BASE  default http://localhost:8000
-    GEMVAULT_ADMIN_EMAIL / _PASSWORD  default admin@example.com / adminpass1234
+    ASSAY_API_BASE  default http://localhost:8000
+    ASSAY_ADMIN_EMAIL / _PASSWORD  default admin@example.com / adminpass1234
 
 The script is idempotent-friendly: it tolerates "already registered" responses
 and continues. It exits 0 if at least one escrow reached the RELEASED state.
@@ -31,9 +31,9 @@ from psycopg.rows import dict_row
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-API_BASE = os.environ.get("GEMVAULT_API_BASE", "http://localhost:8000")
-ADMIN_EMAIL = os.environ.get("GEMVAULT_ADMIN_EMAIL", "admin@example.com")
-ADMIN_PASSWORD = os.environ.get("GEMVAULT_ADMIN_PASSWORD", "adminpass1234")
+API_BASE = os.environ.get("ASSAY_API_BASE", "http://localhost:8000")
+ADMIN_EMAIL = os.environ.get("ASSAY_ADMIN_EMAIL", "admin@example.com")
+ADMIN_PASSWORD = os.environ.get("ASSAY_ADMIN_PASSWORD", "adminpass1234")
 VAULT_SECRET = os.environ.get("VAULT_HMAC_SECRET", "supersecret-vault-key")
 VAULT_OPERATOR = os.environ.get("VAULT_OPERATOR_ID", "vault-test")
 DB_URL = os.environ.get("DATABASE_URL_SYNC")
@@ -117,13 +117,13 @@ def register_asset(
     response = client.post(
         "/api/v1/assets",
         json={
-            "asset_type": "sapphire",
+            "asset_type": "gold-bar",
             "lab_cert_number": lab_cert_number,
             "vault_location": "ZUR-VAULT-A",
             "owner_user_id": owner_id,
-            "grade": "AAA",
-            "weight_carats": "3.500",
-            "photo_ipfs_hash": "QmDemoSapphirePhoto",
+            "grade": "999.9",
+            "weight_troy_oz": "400.000",
+            "photo_ipfs_hash": "QmDemoGoldBarPhoto",
         },
         headers=headers,
     )
@@ -190,9 +190,9 @@ def vault_attest(client: httpx.Client, escrow_id: str) -> None:
         content=raw,
         headers={
             "Content-Type": "application/json",
-            "X-GemVault-Operator-Id": VAULT_OPERATOR,
-            "X-GemVault-Nonce": f"seed-{escrow_id[:12]}-{datetime.now(UTC).timestamp()}",
-            "X-GemVault-Signature": sig,
+            "X-Assay-Operator-Id": VAULT_OPERATOR,
+            "X-Assay-Nonce": f"seed-{escrow_id[:12]}-{datetime.now(UTC).timestamp()}",
+            "X-Assay-Signature": sig,
         },
     )
     response.raise_for_status()
@@ -219,12 +219,12 @@ def main() -> int:
         print("→ Fund the buyer with 500 USDC")
         deposit(client, buyer_id, "500.0", headers)
 
-        print("→ Register a sapphire asset to the seller")
+        print("→ Register a gold-bar asset to the seller")
         asset_id = register_asset(
             client,
             seller_id,
             headers,
-            lab_cert_number=f"GIA-DEMO-{datetime.now(UTC).strftime('%H%M%S')}",
+            lab_cert_number=f"LBMA-DEMO-{datetime.now(UTC).strftime('%H%M%S')}",
         )
 
         print("→ Open an escrow for 100 USDC")

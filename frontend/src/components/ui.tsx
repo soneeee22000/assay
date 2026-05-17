@@ -313,7 +313,7 @@ export function BrandMark({ className }: { className?: string }) {
           />
         </svg>
       </span>
-      <span className="text-foreground">GemVault</span>
+      <span className="text-foreground">Assay</span>
     </div>
   );
 }

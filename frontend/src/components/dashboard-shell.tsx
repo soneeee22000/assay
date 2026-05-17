@@ -124,14 +124,14 @@ export function DashboardShell({
         {children}
 
         <footer className="mt-12 border-t border-border pt-4 font-mono text-[11px] text-foreground-subtle">
-          Read-only · powered by the GemVault FastAPI backend ·{" "}
+          Read-only · powered by the Assay FastAPI backend ·{" "}
           <a
-            href="https://github.com/soneeee22000/gemvault"
+            href="https://github.com/soneeee22000/assay"
             target="_blank"
             rel="noopener noreferrer"
             className="text-foreground-muted hover:text-foreground"
           >
-            github.com/soneeee22000/gemvault
+            github.com/soneeee22000/assay
           </a>
         </footer>
       </main>

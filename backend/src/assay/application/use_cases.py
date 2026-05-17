@@ -9,20 +9,20 @@ from uuid import UUID, uuid4
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from gemvault.adapters.auth.passwords import hash_password, verify_password
-from gemvault.adapters.chain import ChainClient
-from gemvault.adapters.persistence import (
+from assay.adapters.auth.passwords import hash_password, verify_password
+from assay.adapters.chain import ChainClient
+from assay.adapters.persistence import (
     EscrowRepository,
     EventStore,
     UserRepository,
 )
-from gemvault.adapters.persistence.models import (
+from assay.adapters.persistence.models import (
     AssetRow,
     CertificateRow,
     UserRow,
     VaultAttestationRow,
 )
-from gemvault.domain import (
+from assay.domain import (
     Asset,
     EmailAddress,
     Escrow,
@@ -136,7 +136,7 @@ class RegisterAssetInput:
     vault_location: str
     owner_user_id: UUID
     grade: str | None = None
-    weight_carats: Decimal | None = None
+    weight_troy_oz: Decimal | None = None
     photo_ipfs_hash: str | None = None
 
 
@@ -150,14 +150,14 @@ async def register_asset(
         vault_location=inp.vault_location,
         owner_user_id=inp.owner_user_id,
         grade=inp.grade,
-        weight_carats=inp.weight_carats,
+        weight_troy_oz=inp.weight_troy_oz,
         photo_ipfs_hash=IpfsHash(inp.photo_ipfs_hash) if inp.photo_ipfs_hash else None,
     )
     row = AssetRow(
         asset_id=asset.asset_id,
         asset_type=asset.asset_type,
         grade=asset.grade,
-        weight_carats=asset.weight_carats,
+        weight_troy_oz=asset.weight_troy_oz,
         lab_cert_number=asset.lab_cert_number,
         photo_ipfs_hash=asset.photo_ipfs_hash.value if asset.photo_ipfs_hash else None,
         vault_location=asset.vault_location,

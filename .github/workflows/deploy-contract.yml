@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy GemVaultCertificate to ${{ inputs.network }}
+    name: Deploy AssayCertificate to ${{ inputs.network }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -65,7 +65,7 @@ jobs:
         run: |
           ADDR=$(grep -oE '0x[a-fA-F0-9]{40}' deploy.log | tail -n 1 || true)
           echo "Deployed contract: ${ADDR:-unknown}"
-          echo "## GemVaultCertificate deployed" >> "$GITHUB_STEP_SUMMARY"
+          echo "## AssayCertificate deployed" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "- Network: \`${{ inputs.network }}\`" >> "$GITHUB_STEP_SUMMARY"
           echo "- Address: \`${ADDR:-unknown}\`" >> "$GITHUB_STEP_SUMMARY"

@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from gemvault.domain import (
+from assay.domain import (
     Asset,
     EmailAddress,
     Escrow,
@@ -104,11 +104,11 @@ def minted_escrow(vault_attested_escrow: Escrow) -> Escrow:
 def sample_asset(seller_id: UUID, asset_id: UUID) -> Asset:
     return Asset.register(
         asset_id=asset_id,
-        asset_type="sapphire",
-        lab_cert_number="GIA-2026-001",
+        asset_type="gold-bar",
+        lab_cert_number="LBMA-2026-001",
         vault_location="ZUR-VAULT-A",
         owner_user_id=seller_id,
-        grade="AAA",
-        weight_carats=Decimal("3.500"),
+        grade="999.9",
+        weight_troy_oz=Decimal("400.000"),
         photo_ipfs_hash=IpfsHash("QmAssetPhotoSampleHashAaa"),
     )

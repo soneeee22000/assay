@@ -8,7 +8,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from gemvault.domain import EmailAddress, KycStatus, Money, User
+from assay.domain import EmailAddress, KycStatus, Money, User
 
 from ..models import UserRow
 

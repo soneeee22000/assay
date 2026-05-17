@@ -1,4 +1,4 @@
-# GemVault Contracts
+# Assay Contracts
 
 Solidity 0.8.28 · Foundry · OpenZeppelin v5
 
@@ -29,11 +29,11 @@ forge script script/Deploy.s.sol --rpc-url $BASE_RPC_URL --broadcast --verify
 
 ```
 src/
-└── GemVaultCertificate.sol    ERC-721 cert with vault-attestation transfer gate
+└── AssayCertificate.sol    ERC-721 cert with vault-attestation transfer gate
 script/
 └── Deploy.s.sol               Foundry deploy script for Base Sepolia
 test/
-└── GemVaultCertificate.t.sol  Unit + invariant tests
+└── AssayCertificate.t.sol  Unit + invariant tests
 ```
 
 ## Design notes

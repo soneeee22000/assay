@@ -6,8 +6,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from gemvault import __version__
-from gemvault.adapters.api import api_router, install_exception_handlers
+from assay import __version__
+from assay.adapters.api import api_router, install_exception_handlers
 
 _DESCRIPTION = (
     "Reference RWA fintech backend: financial-grade ledger + on-chain certificate orchestration."
@@ -24,7 +24,7 @@ def _cors_origins() -> list[str]:
 
 
 app = FastAPI(
-    title="GemVault Backend",
+    title="Assay Backend",
     version=__version__,
     description=_DESCRIPTION,
 )

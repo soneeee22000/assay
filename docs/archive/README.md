@@ -7,6 +7,6 @@ That direction was retired on the same day after better signal arrived about the
 - `whale-sense-brainstorm.md` — Analogical-transfer brainstorm that produced the initial concept
 - `whale-sense-moat-check.md` — Weekend-Vibe-Code Test (5-point defensibility audit) verdict: 🟢 green for portfolio scope, 🟡 yellow as venture
 - `whale-sense-prfaq.md` — Press release + adversarial FAQ (pending verdict at archival time)
-- `whale-sense-signup-checklist.md` — Verified signup paths for the agent build (Alchemy, Coinbase CDP, Farcaster/Neynar, etc.) — most paths are still relevant to GemVault
+- `whale-sense-signup-checklist.md` — Verified signup paths for the agent build (Alchemy, Coinbase CDP, Farcaster/Neynar, etc.) — most paths are still relevant to Assay
 
-Active project: see [`../PRD-GEMVAULT.md`](../PRD-GEMVAULT.md) and [`../../README.md`](../../README.md).
+Active project: see [`../PRD-ASSAY.md`](../PRD-ASSAY.md) and [`../../README.md`](../../README.md).

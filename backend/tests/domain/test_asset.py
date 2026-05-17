@@ -5,7 +5,7 @@ from uuid import uuid4
 
 import pytest
 
-from gemvault.domain import Asset, AssetRegistered, IpfsHash
+from assay.domain import Asset, AssetRegistered, IpfsHash
 
 
 class TestAssetRegister:
@@ -13,15 +13,15 @@ class TestAssetRegister:
         owner = uuid4()
         asset = Asset.register(
             asset_id=uuid4(),
-            asset_type="ruby",
-            lab_cert_number="SSEF-2026-007",
+            asset_type="silver-bar",
+            lab_cert_number="METALOR-2026-007",
             vault_location="PAR-VAULT-B",
             owner_user_id=owner,
             grade="AA",
-            weight_carats=Decimal("2.150"),
+            weight_troy_oz=Decimal("2.150"),
             photo_ipfs_hash=IpfsHash("QmAssetPhotoHash"),
         )
-        assert asset.asset_type == "ruby"
+        assert asset.asset_type == "silver-bar"
         events = asset.pull_events()
         assert len(events) == 1
         assert isinstance(events[0], AssetRegistered)
@@ -39,8 +39,8 @@ class TestAssetRegister:
     def test_rejects_blank_required_field(self, field: str, value: str) -> None:
         kwargs = {
             "asset_id": uuid4(),
-            "asset_type": "ruby",
-            "lab_cert_number": "GIA-1",
+            "asset_type": "silver-bar",
+            "lab_cert_number": "LBMA-1",
             "vault_location": "ZUR-A",
             "owner_user_id": uuid4(),
         }
@@ -52,11 +52,11 @@ class TestAssetRegister:
         with pytest.raises(ValueError):
             Asset.register(
                 asset_id=uuid4(),
-                asset_type="ruby",
-                lab_cert_number="GIA-1",
+                asset_type="silver-bar",
+                lab_cert_number="LBMA-1",
                 vault_location="ZUR-A",
                 owner_user_id=uuid4(),
-                weight_carats=Decimal("0"),
+                weight_troy_oz=Decimal("0"),
             )
 
 

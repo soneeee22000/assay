@@ -5,7 +5,7 @@ from uuid import uuid4
 
 import pytest
 
-from gemvault.domain import (
+from assay.domain import (
     EmailAddress,
     FundsDeposited,
     FundsWithdrawn,

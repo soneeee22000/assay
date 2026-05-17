@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import pytest
 
-from gemvault.domain import DomainEvent, EscrowOpened, UserRegistered
+from assay.domain import DomainEvent, EscrowOpened, UserRegistered
 
 
 class TestDomainEventDefaults:

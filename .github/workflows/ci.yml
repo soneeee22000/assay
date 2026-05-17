@@ -21,13 +21,13 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: gemvault
-          POSTGRES_PASSWORD: gemvault
-          POSTGRES_DB: gemvault
+          POSTGRES_USER: assay
+          POSTGRES_PASSWORD: assay
+          POSTGRES_DB: assay
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U gemvault"
+          --health-cmd "pg_isready -U assay"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
@@ -52,12 +52,12 @@ jobs:
         run: mypy src
       - name: Pytest (unit + smoke)
         env:
-          DATABASE_URL: postgresql+asyncpg://gemvault:gemvault@localhost:5432/gemvault
+          DATABASE_URL: postgresql+asyncpg://assay:assay@localhost:5432/assay
         run: pytest tests/domain tests/test_smoke.py --no-cov
 
       - name: Pytest (integration)
         env:
-          DATABASE_URL: postgresql+asyncpg://gemvault:gemvault@localhost:5432/gemvault
+          DATABASE_URL: postgresql+asyncpg://assay:assay@localhost:5432/assay
         continue-on-error: true
         timeout-minutes: 5
         run: pytest tests/adapters --no-cov

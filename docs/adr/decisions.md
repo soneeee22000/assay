@@ -7,13 +7,13 @@ Format: each ADR captures one architectural decision with context, the alternati
 ## ADR-001 — ERC-721 (1-of-1) over ERC-3525 (semi-fungible)
 
 **Status:** Accepted · 2026-05-11
-**Context:** Each physical asset (gemstone) in the platform has a unique lab certification number and a unique provenance record. The question is whether to model on-chain certificates as fully unique tokens (ERC-721), semi-fungible classes (ERC-3525), or fungible batches (ERC-1155).
+**Context:** Each physical asset (a precious-metal bar) in the platform has a unique assay certificate number and a unique provenance record. The question is whether to model on-chain certificates as fully unique tokens (ERC-721), semi-fungible classes (ERC-3525), or fungible batches (ERC-1155).
 
 **Decision:** ERC-721. One token per certificate, strict 1-of-1.
 
 **Alternatives considered:**
 
-- **ERC-3525 (semi-fungible token).** Lets us group certificates by carat-grade bucket or asset class for partial-share fractional ownership. Rejected for v1: fractional ownership is explicitly out of scope per PRD, and the standard adds tooling complexity (wallets and explorers handle ERC-3525 inconsistently).
+- **ERC-3525 (semi-fungible token).** Lets us group certificates by fineness-grade bucket or asset class for partial-share fractional ownership. Rejected for v1: fractional ownership is explicitly out of scope per PRD, and the standard adds tooling complexity (wallets and explorers handle ERC-3525 inconsistently).
 - **ERC-1155 (multi-token).** Lets us batch-mint fungible classes plus 1-of-1 NFTs in one contract. Rejected: the certification model is inherently unique per asset; batching is a feature for utility tokens, not certificates of authenticity.
 - **A custom non-standard contract.** Rejected outright — interoperability with marketplaces, indexers, and wallets is critical even for a portfolio piece.
 
@@ -44,7 +44,7 @@ Format: each ADR captures one architectural decision with context, the alternati
 - Gas paid by the platform, not the vault. Better partner UX, slightly higher operational cost (negligible on Base).
 - Vault operators integrate with a 50-line HTTP client + shared secret. No crypto knowledge required.
 - Replay protection: `(operator_id, nonce)` unique constraint at the DB layer.
-- Signature scheme: HMAC-SHA256 over the raw request body, base64-encoded, sent in `X-GemVault-Signature` header.
+- Signature scheme: HMAC-SHA256 over the raw request body, base64-encoded, sent in `X-Assay-Signature` header.
 
 ---
 

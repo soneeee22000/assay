@@ -49,7 +49,7 @@ class RegisterAssetRequest(BaseModel):
     vault_location: str = Field(min_length=1, max_length=64)
     owner_user_id: UUID
     grade: str | None = None
-    weight_carats: Decimal | None = Field(default=None, gt=0)
+    weight_troy_oz: Decimal | None = Field(default=None, gt=0)
     photo_ipfs_hash: str | None = None
 
 
@@ -57,7 +57,7 @@ class AssetResponse(BaseModel):
     asset_id: UUID
     asset_type: str
     grade: str | None
-    weight_carats: Decimal | None
+    weight_troy_oz: Decimal | None
     lab_cert_number: str
     vault_location: str
     owner_user_id: UUID

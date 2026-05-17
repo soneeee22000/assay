@@ -1,15 +1,15 @@
-# GemVault — Product Requirements
+# Assay — Product Requirements
 
-**Codename:** GemVault
+**Codename:** Assay
 **Status:** Spec locked 2026-05-11 · architecture next
 **Target build window:** ~2 weeks (one focused builder)
-**Positioning:** Reference RWA fintech architecture — physical asset (high-value collectibles, with gemstones as the worked example) tokenised as certificate-of-authenticity NFTs, settled through a custodian-backed escrow flow, on a financial-grade event-sourced ledger.
+**Positioning:** Reference RWA fintech architecture — physical asset (vaulted precious metals, with allocated gold and silver bullion as the worked example) tokenised as certificate-of-authenticity NFTs, settled through a custodian-backed escrow flow, on a financial-grade event-sourced ledger.
 
 ## Why this project exists
 
 Most "Web3 portfolio" repos prove one skill: "I can write a Solidity contract" OR "I can integrate a wallet" OR "I can ship a dashboard." Almost none prove the layer the fintech-meets-RWA category actually needs: a clean, regulated-grade backend that owns the ledger, audit log, escrow lifecycle, AND the on-chain certification layer in one vertical slice.
 
-GemVault is that vertical slice. It is deliberately scoped so that a reviewer scanning the repo in five minutes can see all four layers (smart contract, ledger backend, audit trail, admin dashboard) and follow them end-to-end.
+Assay is that vertical slice. It is deliberately scoped so that a reviewer scanning the repo in five minutes can see all four layers (smart contract, ledger backend, audit trail, admin dashboard) and follow them end-to-end.
 
 ## Target reader (who this portfolio piece is for)
 
@@ -20,7 +20,7 @@ GemVault is that vertical slice. It is deliberately scoped so that a reviewer sc
 ## Non-goals
 
 - Not a venture in itself — no GTM, no buyer acquisition, no production hardening beyond what the demo flow needs
-- Not an attempt to compete with GIA / IGS / SSEF — the on-chain cert is a _companion_ to lab certification, not a replacement
+- Not an attempt to compete with LBMA-accredited assayers — the on-chain cert is a _companion_ to the assay certificate, not a replacement
 - Not a marketplace — secondary trading is out of scope (mintable + transferable is enough)
 - Not a DeFi protocol — no AMM, no lending, no yield
 
@@ -162,7 +162,7 @@ Original open-questions text retained below for traceability.
 
 ---
 
-1. ERC-721 vs ERC-3525 — does the gemstone domain need semi-fungible cert classes (e.g. 5 carat-grade buckets) or strict 1-of-1?
+1. ERC-721 vs ERC-3525 — does the bullion domain need semi-fungible cert classes (e.g. 5 fineness-grade buckets) or strict 1-of-1?
 2. Vault attestation: on-chain signed message or off-chain webhook + on-chain admin transaction? Tradeoff: trust assumption vs gas cost.
 3. Event store: single table or per-aggregate streams? Single table is simpler; per-stream is more orthodox.
 4. Auth: stub JWT in headers or wire up a real provider (Clerk / Supabase Auth)? Stub is faster; real provider signals more polish.

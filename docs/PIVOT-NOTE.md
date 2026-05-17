@@ -2,7 +2,7 @@
 
 ## What changed
 
-The active project direction pivoted from an autonomous DeFi trading agent (codename **Whale-Sense**) to a regulated-grade RWA fintech reference architecture (codename **GemVault**).
+The active project direction pivoted from an autonomous DeFi trading agent (codename **Whale-Sense**) to a regulated-grade RWA fintech reference architecture (codename **Assay**).
 
 ## Why
 
@@ -43,5 +43,5 @@ Reading the target reader's published material _before_ scoping the project, rat
 ## Decision artefacts
 
 - Original direction artefacts: [`docs/archive/`](./archive/)
-- Active spec: [`docs/PRD-GEMVAULT.md`](./PRD-GEMVAULT.md)
+- Active spec: [`docs/PRD-ASSAY.md`](./PRD-ASSAY.md)
 - Active root: [`../README.md`](../README.md)

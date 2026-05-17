@@ -3,17 +3,17 @@ from __future__ import annotations
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from gemvault.adapters.auth.jwt_provider import JwtError
-from gemvault.adapters.webhook.hmac_verifier import (
+from assay.adapters.auth.jwt_provider import JwtError
+from assay.adapters.webhook.hmac_verifier import (
     InvalidSignatureError,
     ReplayedNonceError,
 )
-from gemvault.application.use_cases import (
+from assay.application.use_cases import (
     AuthenticationError,
     NotFoundError,
     WrongStateError,
 )
-from gemvault.domain import (
+from assay.domain import (
     DomainError,
     InsufficientBalance,
     InvalidEscrowParticipants,
@@ -73,7 +73,7 @@ def _problem(status: int, slug: str, detail: str) -> JSONResponse:
         status_code=status,
         media_type="application/problem+json",
         content={
-            "type": f"https://gemvault.dev/problems/{slug}",
+            "type": f"https://assay.dev/problems/{slug}",
             "title": slug.replace("_", " ").title(),
             "status": status,
             "detail": detail,

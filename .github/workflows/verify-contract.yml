@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       address:
-        description: Deployed GemVaultCertificate address
+        description: Deployed AssayCertificate address
         type: string
         required: true
       admin:
@@ -52,7 +52,7 @@ jobs:
           set -euo pipefail
           forge verify-contract \
             "${{ inputs.address }}" \
-            src/GemVaultCertificate.sol:GemVaultCertificate \
+            src/AssayCertificate.sol:AssayCertificate \
             --chain 84532 \
             --constructor-args "$(cast abi-encode 'constructor(address)' '${{ inputs.admin }}')" \
             --watch

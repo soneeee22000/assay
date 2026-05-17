@@ -18,10 +18,10 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "GemVault — RWA Fintech Reference Architecture",
+  title: "Assay — RWA Fintech Reference Architecture",
   description:
     "Event-sourced ledger, on-chain certificates of authenticity, and custodian-backed escrow lifecycle. Read-only admin dashboard.",
-  applicationName: "GemVault",
+  applicationName: "Assay",
   authors: [{ name: "Pyae Sone Kyaw", url: "https://pseonkyaw.dev" }],
 };
 

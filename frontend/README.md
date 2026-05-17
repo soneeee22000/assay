@@ -1,8 +1,8 @@
-# GemVault Frontend
+# Assay Frontend
 
 Next.js 15 · React 19 · TypeScript (strict) · Tailwind 4 · shadcn-style design tokens
 
-Read-only admin dashboard for the GemVault backend. See [`../docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md).
+Read-only admin dashboard for the Assay backend. See [`../docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md).
 
 ## Quick start
 

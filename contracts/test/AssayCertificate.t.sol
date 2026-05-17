@@ -2,10 +2,10 @@
 pragma solidity ^0.8.28;
 
 import {Test} from "forge-std/Test.sol";
-import {GemVaultCertificate} from "../src/GemVaultCertificate.sol";
+import {AssayCertificate} from "../src/AssayCertificate.sol";
 
-contract GemVaultCertificateTest is Test {
-    GemVaultCertificate internal cert;
+contract AssayCertificateTest is Test {
+    AssayCertificate internal cert;
     address internal admin = address(0xA11CE);
     address internal alice = address(0xA1);
     address internal bob = address(0xB0B);
@@ -15,7 +15,7 @@ contract GemVaultCertificateTest is Test {
 
     function setUp() public {
         vm.prank(admin);
-        cert = new GemVaultCertificate(admin);
+        cert = new AssayCertificate(admin);
     }
 
     function test_admin_can_mint_to_user() public {
@@ -37,7 +37,7 @@ contract GemVaultCertificateTest is Test {
         cert.mint(alice, 1, IPFS_HASH);
 
         vm.expectRevert(
-            abi.encodeWithSelector(GemVaultCertificate.TransferRequiresVaultAttestation.selector, 1)
+            abi.encodeWithSelector(AssayCertificate.TransferRequiresVaultAttestation.selector, 1)
         );
         vm.prank(alice);
         cert.transferFrom(alice, bob, 1);
@@ -69,7 +69,7 @@ contract GemVaultCertificateTest is Test {
         cert.mint(alice, 1, IPFS_HASH);
         cert.attestVault(1, VAULT_REF);
 
-        vm.expectRevert(abi.encodeWithSelector(GemVaultCertificate.AlreadyAttested.selector, 1));
+        vm.expectRevert(abi.encodeWithSelector(AssayCertificate.AlreadyAttested.selector, 1));
         cert.attestVault(1, VAULT_REF);
         vm.stopPrank();
     }

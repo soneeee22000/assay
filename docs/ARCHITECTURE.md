@@ -1,8 +1,8 @@
-# GemVault — Architecture
+# Assay — Architecture
 
 **Reference architecture for an RWA fintech: physical-asset certificate-of-authenticity NFTs settled through a custodian-backed escrow on a financial-grade event-sourced ledger.**
 
-This document is the architectural plan. Decisions on contested choices are captured in [`adr/decisions.md`](./adr/decisions.md); the API surface is in [`openapi.yaml`](./openapi.yaml); the product spec is in [`PRD-GEMVAULT.md`](./PRD-GEMVAULT.md).
+This document is the architectural plan. Decisions on contested choices are captured in [`adr/decisions.md`](./adr/decisions.md); the API surface is in [`openapi.yaml`](./openapi.yaml); the product spec is in [`PRD-ASSAY.md`](./PRD-ASSAY.md).
 
 ---
 
@@ -15,7 +15,7 @@ flowchart LR
     Vault[Vault Operator<br/>Off-chain custodian]
     Admin[Platform Admin<br/>Dashboard user]
 
-    subgraph GemVault[GemVault System]
+    subgraph Assay[Assay System]
         Frontend[Next.js Dashboard]
         Backend[FastAPI Backend]
         DB[(Postgres<br/>Event Store + Projections)]
@@ -180,7 +180,7 @@ CREATE TABLE assets (
     asset_id          UUID        PRIMARY KEY,
     asset_type        TEXT        NOT NULL,
     grade             TEXT,
-    weight_carats     NUMERIC(10, 3),
+    weight_troy_oz     NUMERIC(10, 3),
     lab_cert_number   TEXT        UNIQUE NOT NULL,
     photo_ipfs_hash   TEXT,
     vault_location    TEXT        NOT NULL,
@@ -254,21 +254,21 @@ All `NUMERIC(20, 6)` for USDC amounts (6 decimals matches USDC's on-chain precis
 ```
 contracts/
 ├── src/
-│   ├── GemVaultCertificate.sol      ERC-721 cert with vault-attestation transfer gate
+│   ├── AssayCertificate.sol      ERC-721 cert with vault-attestation transfer gate
 │   └── interfaces/
-│       └── IGemVaultCertificate.sol
+│       └── IAssayCertificate.sol
 ├── script/
 │   └── Deploy.s.sol                  Foundry deploy script for Base Sepolia
 └── test/
-    ├── GemVaultCertificate.t.sol     Unit tests (Foundry forge-std)
+    ├── AssayCertificate.t.sol     Unit tests (Foundry forge-std)
     └── invariants/
         └── CertInvariants.t.sol      Invariant tests (no double-mint, attestation required)
 ```
 
-### `GemVaultCertificate.sol` surface
+### `AssayCertificate.sol` surface
 
 ```solidity
-contract GemVaultCertificate is ERC721, Pausable, AccessControl {
+contract AssayCertificate is ERC721, Pausable, AccessControl {
     bytes32 public constant MINTER_ROLE   = keccak256("MINTER_ROLE");
     bytes32 public constant ATTESTER_ROLE = keccak256("ATTESTER_ROLE");
 
@@ -279,7 +279,7 @@ contract GemVaultCertificate is ERC721, Pausable, AccessControl {
     function mint(address to, uint256 tokenId, string calldata ipfsHash) external onlyRole(MINTER_ROLE) whenNotPaused;
     function attestVault(uint256 tokenId, string calldata vaultRef) external onlyRole(ATTESTER_ROLE);
     function _beforeTokenTransfer(...) internal override whenNotPaused {
-        require(attestations[tokenId].attested, "GemVault: vault attestation required");
+        require(attestations[tokenId].attested, "Assay: vault attestation required");
         super._beforeTokenTransfer(...);
     }
 }
@@ -303,9 +303,9 @@ The platform's backend holds both `MINTER_ROLE` and `ATTESTER_ROLE` on Base Sepo
 
 ```http
 POST /api/v1/vault/attest
-X-GemVault-Operator-Id: vault-zurich-001
-X-GemVault-Nonce: 8f2a-...-d3c1
-X-GemVault-Signature: <HMAC-SHA256 of body, base64>
+X-Assay-Operator-Id: vault-zurich-001
+X-Assay-Nonce: 8f2a-...-d3c1
+X-Assay-Signature: <HMAC-SHA256 of body, base64>
 
 {
   "escrow_id": "uuid",
@@ -330,7 +330,7 @@ Replay protection: `(operator_id, nonce)` must be unique. Signature verification
 | IPFS gateway | Pinata       | Free tier. Public gateway URL pinned in metadata.                                  |
 | Secrets      | Railway env  | `.env.example` committed; real `.env` gitignored.                                  |
 
-Public URLs for the demo: `gemvault-backend.up.railway.app`, `gemvault.vercel.app`, contract on Basescan. All linked from README.
+Public URLs for the demo: `assay-backend.up.railway.app`, `assay.vercel.app`, contract on Basescan. All linked from README.
 
 ---
 

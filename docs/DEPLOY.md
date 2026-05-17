@@ -1,6 +1,6 @@
 # Deploy Guide
 
-End-to-end recipe to take GemVault from local to a live demo URL.
+End-to-end recipe to take Assay from local to a live demo URL.
 
 ## 1. Smart contract (Base Sepolia)
 
@@ -70,8 +70,8 @@ Set one env var in Vercel (Project → Settings → Environment Variables):
 | `NEXT_PUBLIC_IPFS_GATEWAY` | `https://gateway.pinata.cloud/ipfs`         |
 
 After the first deploy, copy the Vercel URL into the backend's CORS
-allowlist (`src/gemvault/main.py` → `allow_origins`) and redeploy the
-backend. The current list already includes `https://gemvault.vercel.app`
+allowlist (`src/assay/main.py` → `allow_origins`) and redeploy the
+backend. The current list already includes `https://assay.vercel.app`
 as a default.
 
 ## 4. Seed demo data
@@ -81,7 +81,7 @@ dashboard has something to show:
 
 ```bash
 # Locally pointed at the live backend:
-GEMVAULT_API_BASE=https://<your-railway-url> \
+ASSAY_API_BASE=https://<your-railway-url> \
 DATABASE_URL_SYNC=postgresql://<railway-postgres-conn> \
 python scripts/demo/seed.py
 ```
@@ -115,7 +115,7 @@ Edit the top-level `README.md` to:
 - Embed `docs/demo.gif` near the top
 - Add the Basescan link to the deployed contract
 - Add a green CI badge:
-  `![CI](https://github.com/soneeee22000/gemvault/actions/workflows/ci.yml/badge.svg)`
+  `![CI](https://github.com/soneeee22000/assay/actions/workflows/ci.yml/badge.svg)`
 
 Commit + push.
 

@@ -1,10 +1,10 @@
 import { defineConfig } from "@playwright/test";
 
 /**
- * Playwright config for the GemVault demo recording.
+ * Playwright config for the Assay demo recording.
  *
  *   cd frontend
- *   FRONTEND_URL=https://gemvault-delta.vercel.app npx playwright test
+ *   FRONTEND_URL=https://assay-delta.vercel.app npx playwright test
  */
 export default defineConfig({
   testDir: "./e2e",

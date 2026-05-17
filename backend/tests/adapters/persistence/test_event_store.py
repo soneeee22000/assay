@@ -7,9 +7,9 @@ from uuid import uuid4
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from gemvault.adapters.persistence import EventStore
-from gemvault.adapters.persistence.event_store import ConcurrencyConflict
-from gemvault.domain import EscrowOpened, FundsLocked, UserRegistered, VaultAttested
+from assay.adapters.persistence import EventStore
+from assay.adapters.persistence.event_store import ConcurrencyConflict
+from assay.domain import EscrowOpened, FundsLocked, UserRegistered, VaultAttested
 
 pytestmark = pytest.mark.asyncio
 

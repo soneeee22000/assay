@@ -51,7 +51,7 @@ export default function LoginPage() {
             <p className="text-sm text-foreground-muted">
               Stub auth per{" "}
               <a
-                href="https://github.com/soneeee22000/gemvault/blob/main/docs/adr/decisions.md"
+                href="https://github.com/soneeee22000/assay/blob/main/docs/adr/decisions.md"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:underline"

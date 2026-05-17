@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     app_env: str = "development"
     log_level: str = "INFO"
 
-    database_url: str = "postgresql+asyncpg://gemvault:gemvault@localhost:5432/gemvault"
+    database_url: str = "postgresql+asyncpg://assay:assay@localhost:5432/assay"
 
     jwt_secret: str = Field(min_length=16)
     jwt_algorithm: str = "HS256"

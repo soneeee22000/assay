@@ -4,7 +4,7 @@ from decimal import Decimal
 
 import pytest
 
-from gemvault.domain import (
+from assay.domain import (
     EmailAddress,
     HmacNonce,
     InvalidMoney,

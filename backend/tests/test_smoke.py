@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from gemvault.main import app
+from assay.main import app
 
 
 def test_health_endpoint_returns_ok() -> None:

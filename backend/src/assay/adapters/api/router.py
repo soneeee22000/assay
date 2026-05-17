@@ -6,9 +6,9 @@ from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Header, Query, Request, status
 
-from gemvault.adapters.persistence import EscrowRepository, EventStore, UserRepository
-from gemvault.application import use_cases as uc
-from gemvault.domain import Money, TxHash, User
+from assay.adapters.persistence import EscrowRepository, EventStore, UserRepository
+from assay.application import use_cases as uc
+from assay.domain import Money, TxHash, User
 
 from .dependencies import (
     AdminUserId,
@@ -127,7 +127,7 @@ async def register_asset(
             vault_location=body.vault_location,
             owner_user_id=body.owner_user_id,
             grade=body.grade,
-            weight_carats=body.weight_carats,
+            weight_troy_oz=body.weight_troy_oz,
             photo_ipfs_hash=body.photo_ipfs_hash,
         ),
         correlation_id=uuid4(),
@@ -136,7 +136,7 @@ async def register_asset(
         asset_id=asset.asset_id,
         asset_type=asset.asset_type,
         grade=asset.grade,
-        weight_carats=asset.weight_carats,
+        weight_troy_oz=asset.weight_troy_oz,
         lab_cert_number=asset.lab_cert_number,
         vault_location=asset.vault_location,
         owner_user_id=asset.owner_user_id,
@@ -213,9 +213,9 @@ async def vault_attest(  # noqa: PLR0913 — webhook payload + 3 required header
     body: VaultAttestationRequest,
     session: SessionDep,
     verifier: HmacDep,
-    operator_id: Annotated[str, Header(alias="X-GemVault-Operator-Id")],
-    nonce: Annotated[str, Header(alias="X-GemVault-Nonce")],
-    signature: Annotated[str, Header(alias="X-GemVault-Signature")],
+    operator_id: Annotated[str, Header(alias="X-Assay-Operator-Id")],
+    nonce: Annotated[str, Header(alias="X-Assay-Nonce")],
+    signature: Annotated[str, Header(alias="X-Assay-Signature")],
 ) -> dict[str, str]:
     raw = await request.body()
     verifier.verify(operator_id=operator_id, body=raw, signature_b64=signature)

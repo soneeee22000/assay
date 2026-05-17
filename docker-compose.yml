@@ -1,17 +1,17 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: gemvault-postgres
+    container_name: assay-postgres
     environment:
-      POSTGRES_USER: gemvault
-      POSTGRES_PASSWORD: gemvault
-      POSTGRES_DB: gemvault
+      POSTGRES_USER: assay
+      POSTGRES_PASSWORD: assay
+      POSTGRES_DB: assay
     ports:
       - "5433:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U gemvault -d gemvault"]
+      test: ["CMD-SHELL", "pg_isready -U assay -d assay"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -20,13 +20,13 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: gemvault-backend
+    container_name: assay-backend
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       APP_ENV: development
-      DATABASE_URL: postgresql+asyncpg://gemvault:gemvault@postgres:5432/gemvault
+      DATABASE_URL: postgresql+asyncpg://assay:assay@postgres:5432/assay
       LOG_LEVEL: INFO
       JWT_SECRET: dev-only-secret-replace-in-prod
       JWT_ALGORITHM: HS256

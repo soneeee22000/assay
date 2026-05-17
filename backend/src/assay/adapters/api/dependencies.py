@@ -8,11 +8,11 @@ from uuid import UUID
 from fastapi import Depends, Header, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from gemvault.adapters.auth import JwtError, JwtProvider
-from gemvault.adapters.chain import ChainClient, StubChainClient
-from gemvault.adapters.persistence import Database
-from gemvault.adapters.webhook import HmacVerifier
-from gemvault.config import Settings
+from assay.adapters.auth import JwtError, JwtProvider
+from assay.adapters.chain import ChainClient, StubChainClient
+from assay.adapters.persistence import Database
+from assay.adapters.webhook import HmacVerifier
+from assay.config import Settings
 
 
 @lru_cache(maxsize=1)

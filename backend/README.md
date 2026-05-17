@@ -1,4 +1,4 @@
-# GemVault Backend
+# Assay Backend
 
 Python 3.12 · FastAPI · Postgres · SQLAlchemy · Pydantic v2 · pytest
 
@@ -13,7 +13,7 @@ pip install -e ".[dev]"
 
 cp .env.example .env                                  # then fill in real values
 pytest                                                # smoke test should pass
-uvicorn gemvault.main:app --reload                    # http://localhost:8000/health
+uvicorn assay.main:app --reload                    # http://localhost:8000/health
 ```
 
 Open API docs at `http://localhost:8000/docs` when the server is running.
@@ -21,7 +21,7 @@ Open API docs at `http://localhost:8000/docs` when the server is running.
 ## Layout
 
 ```
-src/gemvault/
+src/assay/
 ├── domain/        Entities, events, value objects (no framework imports)
 ├── application/   Use-cases that orchestrate domain + adapters
 ├── adapters/      Driver (in) and driven (out) — FastAPI, Postgres, Base RPC, IPFS, auth

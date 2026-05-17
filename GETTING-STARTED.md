@@ -1,6 +1,6 @@
 # Getting Started — Local Development
 
-Step-by-step runbook to get GemVault running on your machine in ~10 minutes. No external API keys required — the chain layer is stubbed locally.
+Step-by-step runbook to get Assay running on your machine in ~10 minutes. No external API keys required — the chain layer is stubbed locally.
 
 > **You'll end with:** Backend on `http://localhost:8000/docs`, dashboard on `http://localhost:3000`, real Postgres in Docker, an admin user signed in, and one full escrow lifecycle visible in the Ledger / Escrows / Certificates views.
 
@@ -23,7 +23,7 @@ If any of those are missing, the **First-time setup** section at the bottom cove
 
 ## Step 1 — Start Docker Desktop
 
-GemVault uses real Postgres locally (per the global "no mocks" rule).
+Assay uses real Postgres locally (per the global "no mocks" rule).
 
 **Action on your end:**
 
@@ -46,7 +46,7 @@ cd C:\Web3-BlockChain
 docker compose up postgres -d
 ```
 
-Expected output: `Container gemvault-postgres  Started`. The first run pulls the `postgres:16-alpine` image (~80 MB, ~30s).
+Expected output: `Container assay-postgres  Started`. The first run pulls the `postgres:16-alpine` image (~80 MB, ~30s).
 
 Verify it's listening:
 
@@ -54,7 +54,7 @@ Verify it's listening:
 docker compose ps
 ```
 
-You should see `gemvault-postgres ... running ... healthy ... 0.0.0.0:5433->5432/tcp`.
+You should see `assay-postgres ... running ... healthy ... 0.0.0.0:5433->5432/tcp`.
 
 > **Why 5433 and not 5432?** If you already have a native PostgreSQL service on your machine (Windows often does), it owns `localhost:5432` and Docker's `127.0.0.1` connections won't reach our container. We bind Docker to `5433` to side-step the collision. If you don't have a native Postgres you can change `docker-compose.yml` back to `"5432:5432"` and `backend/.env`'s `DATABASE_URL` port accordingly.
 
@@ -76,7 +76,7 @@ Expected output:
 INFO  [alembic.runtime.migration] Running upgrade  -> 0001, initial schema
 ```
 
-If you see `ModuleNotFoundError: gemvault`, re-run `pip install -e ".[dev]"` from `backend/`.
+If you see `ModuleNotFoundError: assay`, re-run `pip install -e ".[dev]"` from `backend/`.
 
 ---
 
@@ -85,7 +85,7 @@ If you see `ModuleNotFoundError: gemvault`, re-run `pip install -e ".[dev]"` fro
 In the same terminal (still in `backend/`):
 
 ```powershell
-uvicorn gemvault.main:app --reload --port 8000
+uvicorn assay.main:app --reload --port 8000
 ```
 
 Expected output:
@@ -110,7 +110,7 @@ curl http://localhost:8000/health
 
 ## Step 5 — Seed a full escrow lifecycle
 
-The seed script registers an admin + buyer + seller, approves their KYC, deposits 500 USDC into the buyer's balance, registers a sapphire asset to the seller, opens an escrow for 100 USDC, and drives it all the way through to `RELEASED`.
+The seed script registers an admin + buyer + seller, approves their KYC, deposits 500 USDC into the buyer's balance, registers a gold-bar asset to the seller, opens an escrow for 100 USDC, and drives it all the way through to `RELEASED`.
 
 In a **new** PowerShell terminal:
 
@@ -120,7 +120,7 @@ cd C:\Web3-BlockChain
 # One-time: install the sync Postgres driver the seed uses to bump admin KYC.
 pip install "psycopg[binary]"
 
-$env:DATABASE_URL_SYNC = "postgresql://gemvault:gemvault@localhost:5433/gemvault"
+$env:DATABASE_URL_SYNC = "postgresql://assay:assay@localhost:5433/assay"
 $env:VAULT_HMAC_SECRET = "sr0_7ZAPtQ2RqrjD88oZYwY4FFw2hZON21bCk_ai5FE"
 $env:VAULT_OPERATOR_ID = "vault-local-01"
 python scripts\demo\seed.py
@@ -134,7 +134,7 @@ Expected output:
 → Register buyer + seller
 → Approve KYC for buyer + seller
 → Fund the buyer with 500 USDC
-→ Register a sapphire asset to the seller
+→ Register a gold-bar asset to the seller
 → Open an escrow for 100 USDC
 → Lock funds
 → Vault attestation (HMAC-signed webhook)
@@ -210,7 +210,7 @@ Next start-up only needs Steps 1, 2, 4, 6 (Postgres + backend + frontend). Schem
 | Symptom                                                      | Cause / Fix                                                                                           |
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `docker ps` says "daemon not running"                        | Docker Desktop isn't up yet. Click the taskbar icon and wait 30s.                                     |
-| `alembic upgrade head` says `ModuleNotFoundError: gemvault`  | Reinstall the package: `cd backend && .venv\Scripts\activate && pip install -e ".[dev]"`              |
+| `alembic upgrade head` says `ModuleNotFoundError: assay`  | Reinstall the package: `cd backend && .venv\Scripts\activate && pip install -e ".[dev]"`              |
 | `uvicorn` says `port already in use`                         | Another process holds :8000. Find it: `netstat -ano \| findstr :8000`, kill via Task Manager.         |
 | Frontend home page shows the red "Backend unreachable" badge | Backend not running, or CORS broken. Confirm `curl http://localhost:8000/health` works first.         |
 | Seed script says `401 unknown user or no password set`       | The schema is stale. Run `alembic upgrade head` again, then re-run the seed.                          |

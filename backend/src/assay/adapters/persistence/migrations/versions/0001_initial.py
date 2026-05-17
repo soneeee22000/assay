@@ -51,7 +51,7 @@ def upgrade() -> None:
         sa.Column("asset_id", PgUUID(as_uuid=True), primary_key=True),
         sa.Column("asset_type", sa.String(64), nullable=False),
         sa.Column("grade", sa.String(32), nullable=True),
-        sa.Column("weight_carats", sa.Numeric(10, 3), nullable=True),
+        sa.Column("weight_troy_oz", sa.Numeric(10, 3), nullable=True),
         sa.Column("lab_cert_number", sa.String(128), nullable=False, unique=True),
         sa.Column("photo_ipfs_hash", sa.String(128), nullable=True),
         sa.Column("vault_location", sa.String(64), nullable=False),

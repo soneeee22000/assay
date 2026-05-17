@@ -11,8 +11,8 @@ from httpx import AsyncClient
 from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from gemvault.adapters.persistence import get_sessionmaker
-from gemvault.adapters.persistence.models import UserRow
+from assay.adapters.persistence import get_sessionmaker
+from assay.adapters.persistence.models import UserRow
 
 pytestmark = pytest.mark.asyncio
 
@@ -74,12 +74,12 @@ async def test_full_happy_path(client: AsyncClient, engine: AsyncEngine) -> None
     asset = await client.post(
         "/api/v1/assets",
         json={
-            "asset_type": "sapphire",
-            "lab_cert_number": "GIA-2026-001",
+            "asset_type": "gold-bar",
+            "lab_cert_number": "LBMA-2026-001",
             "vault_location": "ZUR-A",
             "owner_user_id": seller_id,
-            "grade": "AAA",
-            "weight_carats": "3.5",
+            "grade": "999.9",
+            "weight_troy_oz": "400.0",
             "photo_ipfs_hash": "QmAssetSampleHash",
         },
         headers=headers,
@@ -164,8 +164,8 @@ async def test_admin_endpoint_rejects_missing_bearer(client: AsyncClient) -> Non
     r = await client.post(
         "/api/v1/assets",
         json={
-            "asset_type": "ruby",
-            "lab_cert_number": "GIA-X",
+            "asset_type": "silver-bar",
+            "lab_cert_number": "LBMA-X",
             "vault_location": "PAR-A",
             "owner_user_id": "00000000-0000-0000-0000-000000000001",
         },
@@ -184,9 +184,9 @@ async def test_vault_attest_rejects_bad_signature(client: AsyncClient, engine: A
         "/api/v1/vault/attest",
         content=json.dumps(body),
         headers={
-            "X-GemVault-Operator-Id": "vault-test",
-            "X-GemVault-Nonce": "test-nonce-aaaaaaaaaaaa",
-            "X-GemVault-Signature": "QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUE=",
+            "X-Assay-Operator-Id": "vault-test",
+            "X-Assay-Nonce": "test-nonce-aaaaaaaaaaaa",
+            "X-Assay-Signature": "QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUE=",
             "Content-Type": "application/json",
         },
     )
@@ -214,9 +214,9 @@ async def _post_vault_attestation(client: AsyncClient, *, escrow_id: str):
         "/api/v1/vault/attest",
         content=raw,
         headers={
-            "X-GemVault-Operator-Id": "vault-test",
-            "X-GemVault-Nonce": "happy-path-nonce-" + escrow_id[:8],
-            "X-GemVault-Signature": sig,
+            "X-Assay-Operator-Id": "vault-test",
+            "X-Assay-Nonce": "happy-path-nonce-" + escrow_id[:8],
+            "X-Assay-Signature": sig,
             "Content-Type": "application/json",
         },
     )

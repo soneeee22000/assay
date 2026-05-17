@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: GemVault Backend API
+  title: Assay Backend API
   version: 0.1.0
   description: |
     Reference RWA fintech backend. Owns the financial-grade ledger, escrow lifecycle,
@@ -15,7 +15,7 @@ info:
 servers:
   - url: http://localhost:8000/api/v1
     description: Local dev
-  - url: https://gemvault-backend.up.railway.app/api/v1
+  - url: https://assay-backend.up.railway.app/api/v1
     description: Live demo (Railway)
 
 tags:
@@ -240,15 +240,15 @@ paths:
         - vaultHmac: []
       parameters:
         - in: header
-          name: X-GemVault-Operator-Id
+          name: X-Assay-Operator-Id
           required: true
           schema: { type: string }
         - in: header
-          name: X-GemVault-Nonce
+          name: X-Assay-Nonce
           required: true
           schema: { type: string }
         - in: header
-          name: X-GemVault-Signature
+          name: X-Assay-Signature
           required: true
           schema: { type: string, description: "HMAC-SHA256 of body, base64" }
       requestBody:
@@ -311,7 +311,7 @@ components:
     vaultHmac:
       type: apiKey
       in: header
-      name: X-GemVault-Signature
+      name: X-Assay-Signature
 
   parameters:
     IdempotencyKey:
@@ -382,9 +382,9 @@ components:
       type: object
       required: [asset_type, lab_cert_number, vault_location, owner_user_id]
       properties:
-        asset_type: { type: string, example: "sapphire" }
+        asset_type: { type: string, example: "gold-bar" }
         grade: { type: string }
-        weight_carats: { type: string, description: "Decimal as string" }
+        weight_troy_oz: { type: string, description: "Decimal as string" }
         lab_cert_number: { type: string }
         photo_ipfs_hash: { type: string }
         vault_location: { type: string, example: "ZUR-VAULT-A" }
@@ -396,7 +396,7 @@ components:
         asset_id: { type: string, format: uuid }
         asset_type: { type: string }
         grade: { type: string }
-        weight_carats: { type: string }
+        weight_troy_oz: { type: string }
         lab_cert_number: { type: string }
         photo_ipfs_hash: { type: string }
         vault_location: { type: string }

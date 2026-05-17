@@ -1,12 +1,12 @@
 /**
- * Playwright video recording of the GemVault demo flow.
+ * Playwright video recording of the Assay demo flow.
  *
  * Records a walk-through of the deployed dashboard: landing page, sign-in,
  * and the Ledger / Escrows / Certificates views with seeded escrow data.
  *
  * Run against the live deploy:
  *   cd frontend
- *   FRONTEND_URL=https://gemvault-delta.vercel.app npx playwright test
+ *   FRONTEND_URL=https://assay-delta.vercel.app npx playwright test
  *
  * The video lands in `frontend/e2e/.artifacts/`. Convert to GIF with:
  *   ffmpeg -i video.webm -vf "fps=12,scale=960:-1" docs/demo.gif
@@ -18,8 +18,8 @@
 import { test } from "@playwright/test";
 
 const FRONTEND = process.env.FRONTEND_URL ?? "http://localhost:3000";
-const ADMIN_EMAIL = process.env.GEMVAULT_ADMIN_EMAIL ?? "admin@example.com";
-const ADMIN_PASSWORD = process.env.GEMVAULT_ADMIN_PASSWORD ?? "adminpass1234";
+const ADMIN_EMAIL = process.env.ASSAY_ADMIN_EMAIL ?? "admin@example.com";
+const ADMIN_PASSWORD = process.env.ASSAY_ADMIN_PASSWORD ?? "adminpass1234";
 
 test.use({
   viewport: { width: 1280, height: 800 },
@@ -37,7 +37,7 @@ async function settle(page: import("@playwright/test").Page): Promise<void> {
   await page.waitForTimeout(2800);
 }
 
-test("GemVault demo walk-through", async ({ page }) => {
+test("Assay demo walk-through", async ({ page }) => {
   // Landing page
   await page.goto(FRONTEND, { waitUntil: "networkidle" });
   await page.waitForTimeout(3000);

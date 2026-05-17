@@ -1,14 +1,18 @@
 # Changelog
 
-All notable changes to GemVault are documented here.
+All notable changes to Assay are documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **Project repositioned: GemVault → Assay.** Renamed end-to-end — Python package `gemvault` → `assay`, smart contract `GemVaultCertificate` → `AssayCertificate` (ERC-721 symbol `GVC` → `ASC`), the GitHub repository, environment variables, and the HMAC webhook headers (`X-GemVault-*` → `X-Assay-*`). Re-themed from gemstone RWA tokenisation to vaulted precious-metals / allocated-bullion custody: the `Asset` domain now models gold and silver bars, the weight field is `weight_troy_oz` (was `weight_carats`), and `lab_cert_number` carries an LBMA-accredited assayer reference. The escrow lifecycle, event-sourced ledger, and certificate mechanics are unchanged — the rename is copy and identifiers.
+- Live deployment is being re-provisioned under the new name: fresh Railway and Vercel projects and a fresh `AssayCertificate` deploy on Base Sepolia. The README Live Demo section is a placeholder until those land.
+
 ### Added
 
-- Live deployment — dashboard on Vercel (<https://gemvault-delta.vercel.app>), API + managed Postgres on Railway, and `GemVaultCertificate` deployed and source-verified on Base Sepolia (`0x56E9…0508`). Live URLs and a recorded demo GIF now sit in the README.
 - `.github/workflows/verify-contract.yml` — manual-dispatch contract source verification, so an already-deployed address can be verified without a redeploy.
 - Env-driven CORS — a `CORS_ORIGINS` variable lets the live frontend origin be set at deploy time instead of being hardcoded in `main.py`.
 - `frontend/e2e/record.spec.ts` + `frontend/playwright.config.ts` — Playwright walk-through that records the demo GIF against the live deploy.
@@ -23,7 +27,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Etherscan retired its V1 API; `contracts/foundry.toml` now lets Foundry resolve the Etherscan V2 endpoint, so `forge` contract source verification succeeds.
 - `backend/Dockerfile` copies `README.md` into the image — Hatchling needs it for package metadata, so the Railway build no longer fails at `pip install -e .`.
 - `backend/railway.toml` — healthcheck window widened to 300s for a cold Python container, and the start command wrapped in `sh -c` so Railway expands `$PORT`.
-- `gemvault.main` no longer instantiates `Settings` at import time, so importing the app never requires runtime secrets (unblocked CI test collection).
+- `assay.main` no longer instantiates `Settings` at import time, so importing the app never requires runtime secrets (unblocked CI test collection).
 - `docker-compose` Postgres now binds `5433:5432` to side-step machines that already run a native PostgreSQL service on `:5432`.
 - `alembic env.py` loads `backend/.env` on its own via a minimal stdlib parser so `alembic upgrade head` works without pre-exporting `DATABASE_URL`.
 - `scripts/demo/seed.py` forces stdout to UTF-8 at startup; Windows `cp1252` consoles no longer crash on the script's `→` arrows.
@@ -49,7 +53,7 @@ Initial scaffold of the RWA fintech reference architecture. Six sprints landed e
 
 ### Sprint 3 — Smart contract
 
-- `GemVaultCertificate.sol` — ERC-721 with vault-attestation transfer gate (`_update` override), `Pausable`, `AccessControl` (`MINTER_ROLE`, `ATTESTER_ROLE`, `PAUSER_ROLE`).
+- `AssayCertificate.sol` — ERC-721 with vault-attestation transfer gate (`_update` override), `Pausable`, `AccessControl` (`MINTER_ROLE`, `ATTESTER_ROLE`, `PAUSER_ROLE`).
 - Foundry unit + invariant tests; `forge script Deploy --broadcast --verify` ready for Base Sepolia.
 
 ### Sprint 2 — Persistence
@@ -64,7 +68,7 @@ Initial scaffold of the RWA fintech reference architecture. Six sprints landed e
 
 - Pure-Python domain layer: 5 entities (`User`, `Asset`, `Escrow`, `Certificate`, `VaultAttestation`), 6 value objects (`Money`, `EmailAddress`, `IpfsHash`, `TokenId`, `HmacNonce`, `TxHash`), 13 domain events.
 - Seven-state escrow machine: `PENDING → FUNDS_LOCKED → VAULT_ATTESTED → CERTIFICATE_MINTED → RELEASED` with `CANCELLED` / `REFUNDED` branches.
-- 91 unit tests at 99% line coverage; zero framework imports inside `src/gemvault/domain/`.
+- 91 unit tests at 99% line coverage; zero framework imports inside `src/assay/domain/`.
 
 ### Sprint 0 — Scaffold
 
@@ -79,5 +83,5 @@ Initial scaffold of the RWA fintech reference architecture. Six sprints landed e
 - Bumped Next.js from 15.1.0 to 16.2.6 to clear shipped security advisories; committed `package-lock.json`; dropped the removed `next lint` script.
 - Expanded single-line `revert` statements in Solidity to satisfy `forge fmt --check`; flipped `bracket_spacing` to `false` in `foundry.toml`.
 
-[Unreleased]: https://github.com/soneeee22000/gemvault/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/soneeee22000/gemvault/releases/tag/v0.1.0
+[Unreleased]: https://github.com/soneeee22000/assay/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/soneeee22000/assay/releases/tag/v0.1.0

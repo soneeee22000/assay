@@ -7,7 +7,7 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from gemvault.domain import Escrow, EscrowState, Money
+from assay.domain import Escrow, EscrowState, Money
 
 from ..models import EscrowRow
 

@@ -10,11 +10,12 @@ from .value_objects import IpfsHash
 
 @dataclass(slots=True)
 class Asset:
-    """A physical asset under platform custody (gemstones, in the worked example).
+    """A physical asset under vault custody (allocated bullion, in the worked example).
 
     Identity is `asset_id`. `lab_cert_number` is the off-chain ground-truth
-    reference (GIA / SSEF / AGL / IGS etc) — global uniqueness is enforced at
-    the persistence layer, not here.
+    reference — the assay certificate number from an LBMA-accredited assayer
+    (Metalor / PAMP / Valcambi / Argor-Heraeus etc). Global uniqueness is
+    enforced at the persistence layer, not here.
     """
 
     asset_id: UUID
@@ -23,7 +24,7 @@ class Asset:
     vault_location: str
     owner_user_id: UUID
     grade: str | None = None
-    weight_carats: Decimal | None = None
+    weight_troy_oz: Decimal | None = None
     photo_ipfs_hash: IpfsHash | None = None
     _uncommitted: list[DomainEvent] = field(default_factory=list, repr=False)
 
@@ -37,7 +38,7 @@ class Asset:
         vault_location: str,
         owner_user_id: UUID,
         grade: str | None = None,
-        weight_carats: Decimal | None = None,
+        weight_troy_oz: Decimal | None = None,
         photo_ipfs_hash: IpfsHash | None = None,
     ) -> Asset:
         if not asset_type.strip():
@@ -46,8 +47,8 @@ class Asset:
             raise ValueError("lab_cert_number must not be blank")
         if not vault_location.strip():
             raise ValueError("vault_location must not be blank")
-        if weight_carats is not None and weight_carats <= 0:
-            raise ValueError(f"weight_carats must be positive: {weight_carats}")
+        if weight_troy_oz is not None and weight_troy_oz <= 0:
+            raise ValueError(f"weight_troy_oz must be positive: {weight_troy_oz}")
 
         asset = cls(
             asset_id=asset_id,
@@ -56,7 +57,7 @@ class Asset:
             vault_location=vault_location,
             owner_user_id=owner_user_id,
             grade=grade,
-            weight_carats=weight_carats,
+            weight_troy_oz=weight_troy_oz,
             photo_ipfs_hash=photo_ipfs_hash,
         )
         asset._uncommitted.append(

@@ -6,9 +6,9 @@ from uuid import uuid4
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from gemvault.adapters.persistence import EscrowRepository, UserRepository
-from gemvault.adapters.persistence.models import AssetRow
-from gemvault.domain import (
+from assay.adapters.persistence import EscrowRepository, UserRepository
+from assay.adapters.persistence.models import AssetRow
+from assay.domain import (
     EmailAddress,
     Escrow,
     EscrowState,
@@ -150,8 +150,8 @@ async def _make_user(session: AsyncSession, email: str) -> User:
 async def _make_asset(session: AsyncSession, *, owner_id) -> AssetRow:
     row = AssetRow(
         asset_id=uuid4(),
-        asset_type="sapphire",
-        lab_cert_number=f"GIA-TEST-{uuid4().hex[:8]}",
+        asset_type="gold-bar",
+        lab_cert_number=f"LBMA-TEST-{uuid4().hex[:8]}",
         vault_location="ZUR-A",
         owner_user_id=owner_id,
     )

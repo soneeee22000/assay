@@ -41,7 +41,7 @@ export default function Home() {
           <BrandMark />
           <div className="flex items-center gap-2">
             <a
-              href="https://github.com/soneeee22000/gemvault"
+              href="https://github.com/soneeee22000/assay"
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-foreground-muted transition-colors hover:bg-muted hover:text-foreground"
@@ -80,7 +80,7 @@ export default function Home() {
             Event-sourced ledger meets on-chain certificates of authenticity.
           </h1>
           <p className="max-w-2xl text-base leading-relaxed text-foreground-muted sm:text-lg">
-            Physical high-value collectibles tokenised as ERC-721 certificates,
+            Vaulted precious metals tokenised as ERC-721 certificates,
             settled through a custodian-backed escrow lifecycle, on a
             financial-grade event-sourced ledger. Built end-to-end across
             Solidity, Python, and TypeScript.

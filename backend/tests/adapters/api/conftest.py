@@ -13,9 +13,9 @@ import pytest_asyncio  # noqa: E402
 from httpx import ASGITransport, AsyncClient  # noqa: E402
 from sqlalchemy.ext.asyncio import AsyncEngine  # noqa: E402
 
-from gemvault.adapters.api.dependencies import _database, db_session, settings  # noqa: E402
-from gemvault.adapters.persistence import get_sessionmaker  # noqa: E402
-from gemvault.main import app  # noqa: E402
+from assay.adapters.api.dependencies import _database, db_session, settings  # noqa: E402
+from assay.adapters.persistence import get_sessionmaker  # noqa: E402
+from assay.main import app  # noqa: E402
 from tests.conftest import truncate_all  # noqa: E402
 
 
