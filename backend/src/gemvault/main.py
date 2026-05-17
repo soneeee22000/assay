@@ -22,6 +22,7 @@ def _cors_origins() -> list[str]:
     extra = [o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()]
     return [*defaults, *extra]
 
+
 app = FastAPI(
     title="GemVault Backend",
     version=__version__,
