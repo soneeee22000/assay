@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 
 from gemvault import __version__
 from gemvault.adapters.api import api_router, install_exception_handlers
+from gemvault.adapters.api.dependencies import settings
 
 _DESCRIPTION = (
     "Reference RWA fintech backend: financial-grade ledger + on-chain certificate orchestration."
@@ -19,11 +20,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "https://gemvault.vercel.app",
-    ],
+    allow_origins=settings().allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
