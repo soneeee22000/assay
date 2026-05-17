@@ -34,14 +34,6 @@ class Settings(BaseSettings):
 
     basescan_api_key: str = ""
 
-    cors_origins: str = ""
-    """Comma-separated extra allowed CORS origins (e.g. the live frontend URL)."""
-
-    def allowed_origins(self) -> list[str]:
-        defaults = ["http://localhost:3000", "http://127.0.0.1:3000"]
-        extra = [o.strip() for o in self.cors_origins.split(",") if o.strip()]
-        return [*defaults, *extra]
-
     def vault_secrets(self) -> dict[str, str]:
         out: dict[str, str] = {}
         for pair in filter(None, (p.strip() for p in self.vault_hmac_secrets.split(","))):
