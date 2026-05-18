@@ -48,7 +48,7 @@ export default function Home() {
   const dashboardHref = isReady && token ? "/ledger" : "/login";
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="theme-landing min-h-screen">
       <SiteHeader signedIn={isReady && token != null} />
       <Hero health={health} dashboardHref={dashboardHref} />
       <ProblemSection />
@@ -99,12 +99,13 @@ function Hero({
 }) {
   return (
     <section className="mx-auto max-w-6xl px-4 pt-14 pb-16 sm:px-6 sm:pt-20 sm:pb-20">
-      <span className="inline-flex items-center gap-2 rounded-full border border-primary-soft bg-primary-soft px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-primary-soft-foreground">
+      <span className="inline-flex items-center gap-2 rounded-full border border-accent-soft bg-accent-soft px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-accent-soft-foreground">
         <ShieldCheck className="h-3 w-3" aria-hidden />
         RWA fintech reference architecture
       </span>
       <h1 className="mt-5 max-w-3xl text-pretty text-4xl font-semibold leading-[1.12] tracking-tight text-foreground sm:text-5xl">
-        Vaulted metal you can prove you own — and transfer without moving it.
+        Vaulted metal you can <span className="text-accent">prove you own</span>{" "}
+        — and transfer without moving it.
       </h1>
       <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground-muted sm:text-lg">
         Allocated gold and silver sit in a custodian&rsquo;s vault for years on
@@ -140,7 +141,7 @@ function Hero({
 
 function ProblemSection() {
   return (
-    <section className="border-t border-border bg-surface">
+    <section className="border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
         <SectionHeading
           eyebrow="The problem"
@@ -229,7 +230,7 @@ const LIFECYCLE: { title: string; body: string }[] = [
 
 function LifecycleSection() {
   return (
-    <section className="border-t border-border bg-surface">
+    <section className="border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
         <SectionHeading
           eyebrow="How it works"
@@ -240,7 +241,7 @@ function LifecycleSection() {
           {LIFECYCLE.map((step, index) => (
             <li key={step.title} className="flex flex-col gap-3 bg-surface p-5">
               <div className="flex items-center gap-2">
-                <span className="grid h-7 w-7 place-items-center rounded-full bg-primary-soft font-mono text-xs font-semibold text-primary-soft-foreground">
+                <span className="grid h-7 w-7 place-items-center rounded-full bg-accent-soft font-mono text-xs font-semibold text-accent-soft-foreground">
                   {index + 1}
                 </span>
                 {index < LIFECYCLE.length - 1 && (
@@ -305,7 +306,7 @@ const PROOF_STATS: { label: string; value: string; hint: string }[] = [
 
 function ProofSection() {
   return (
-    <section className="border-t border-border bg-surface">
+    <section className="border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
         <SectionHeading
           eyebrow="Built to a standard you can check"
@@ -334,7 +335,7 @@ function ClosingCta({ dashboardHref }: { dashboardHref: string }) {
   return (
     <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
       <Card className="flex flex-col items-start gap-5 p-8 sm:p-10">
-        <Layers className="h-7 w-7 text-primary" aria-hidden />
+        <Layers className="h-7 w-7 text-accent" aria-hidden />
         <h2 className="max-w-2xl text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
           Follow a gold bar from the vault floor to on-chain settlement.
         </h2>
@@ -394,7 +395,7 @@ function SectionHeading({
 }) {
   return (
     <div className="max-w-2xl">
-      <p className="font-mono text-[11px] uppercase tracking-wider text-primary">
+      <p className="font-mono text-[11px] uppercase tracking-wider text-accent">
         {eyebrow}
       </p>
       <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">

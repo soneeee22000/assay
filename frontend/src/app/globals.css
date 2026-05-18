@@ -27,6 +27,10 @@
   --color-accent-soft: oklch(0.95 0.06 75);
   --color-accent-soft-foreground: oklch(0.55 0.15 65);
 
+  /* Brand — fixed, theme-independent (logo / brand mark) */
+  --color-brand-ink: oklch(0.17 0.015 262);
+  --color-brand-gold: oklch(0.82 0.14 82);
+
   /* Semantic */
   --color-success: oklch(0.62 0.16 150);
   --color-success-soft: oklch(0.94 0.06 150);
@@ -144,4 +148,66 @@ pre,
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   Landing theme — a scoped, always-dark premium palette for the marketing
+   page. Independent of OS preference and of the dashboard's adaptive theme.
+   Applied via class="theme-landing" on the landing <main>.
+   ─────────────────────────────────────────────────────────────────────── */
+.theme-landing {
+  --color-background: oklch(0.155 0.014 262);
+  --color-surface: oklch(0.2 0.016 262);
+  --color-surface-elevated: oklch(0.235 0.018 262);
+  --color-muted: oklch(0.245 0.016 262);
+  --color-input: oklch(0.22 0.016 262);
+  --color-border: oklch(0.32 0.018 262);
+  --color-border-strong: oklch(0.44 0.022 262);
+
+  --color-foreground: oklch(0.97 0.004 262);
+  --color-foreground-muted: oklch(0.74 0.018 262);
+  --color-foreground-subtle: oklch(0.58 0.02 262);
+
+  --color-primary: oklch(0.68 0.19 260);
+  --color-primary-hover: oklch(0.74 0.19 260);
+  --color-primary-foreground: oklch(0.99 0 0);
+  --color-primary-soft: oklch(0.32 0.11 260);
+  --color-primary-soft-foreground: oklch(0.87 0.13 260);
+
+  /* Gold — the landing's signature accent (precious-metal brand) */
+  --color-accent: oklch(0.82 0.14 82);
+  --color-accent-soft: oklch(0.36 0.075 78);
+  --color-accent-soft-foreground: oklch(0.87 0.13 85);
+
+  --color-success: oklch(0.74 0.15 150);
+  --color-success-soft: oklch(0.34 0.08 150);
+  --color-warning: oklch(0.8 0.15 80);
+  --color-warning-soft: oklch(0.36 0.09 80);
+  --color-danger: oklch(0.7 0.2 25);
+  --color-danger-soft: oklch(0.34 0.1 25);
+
+  --shadow-xs: 0 1px 1px oklch(0 0 0 / 0.3);
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.4), 0 1px 3px oklch(0 0 0 / 0.3);
+  --shadow-md: 0 2px 4px oklch(0 0 0 / 0.4), 0 10px 28px oklch(0 0 0 / 0.5);
+
+  color-scheme: dark;
+  background-color: var(--color-background);
+  /* Faint top spotlight + a technical hairline grid. */
+  background-image:
+    radial-gradient(
+      640px 340px at 50% -8%,
+      oklch(0.82 0.14 82 / 0.09),
+      transparent 70%
+    ),
+    linear-gradient(oklch(1 0 0 / 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.022) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    60px 60px,
+    60px 60px;
+  background-repeat: no-repeat, repeat, repeat;
+  background-position:
+    top center,
+    top left,
+    top left;
 }
