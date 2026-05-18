@@ -295,21 +295,21 @@ export function BrandMark({ className }: { className?: string }) {
     >
       <span
         aria-hidden
-        className="grid h-7 w-7 place-items-center rounded-md bg-primary text-primary-foreground shadow-sm"
+        className="grid h-7 w-7 place-items-center rounded-md bg-brand-ink text-brand-gold shadow-sm ring-1 ring-inset ring-brand-gold/20"
       >
-        <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5">
+        <svg viewBox="0 0 32 32" fill="none" className="h-5 w-5">
           <path
-            d="M12 2L4 9l8 13 8-13-8-7z"
-            fill="currentColor"
+            d="M9 24.5 L14.6 7.5 L17.4 7.5 L23 24.5"
             stroke="currentColor"
-            strokeWidth="1.2"
+            strokeWidth="3.4"
+            strokeLinecap="round"
             strokeLinejoin="round"
           />
           <path
-            d="M4 9l8 4 8-4M12 13v9"
-            stroke="oklch(1 0 0 / 0.45)"
-            strokeWidth="1.2"
-            strokeLinejoin="round"
+            d="M11.3 18 L20.7 18"
+            stroke="currentColor"
+            strokeWidth="3.4"
+            strokeLinecap="round"
           />
         </svg>
       </span>
